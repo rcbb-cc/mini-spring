@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans>
-    <bean id = "aservice" class = "cc.rcbb.mini.spring.test.AServiceImpl"></bean>
+    <bean id="aservice" class="cc.rcbb.mini.spring.test.AServiceImpl">
+        <property type="String" name="name" value="Hello World!"/>
+        <constructor-arg type="String" name="name" value="abc"/>
+    </bean>
 </beans>

@@ -16,14 +16,14 @@ import cc.rcbb.mini.spring.beans.factory.xml.XmlBeanDefinitionReader;
  * @author rcbb.cc
  * @date 2023/4/3
  */
-public class ClassPathXmlApplicationContext implements BeanFactory {
+public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher {
 
     BeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
         // 解析XML文件中的内容
         Resource resource = new ClassPathXmlResource(fileName);
-        BeanFactory beanFactory = new SimpleBeanFactory();
+        SimpleBeanFactory beanFactory = new SimpleBeanFactory();
         // 加载解析内容，构建BeanDefinition
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
         // 读取BeanDefinition的配置信息，实例化Bean，注入到BeanFactory
@@ -39,5 +39,35 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
     @Override
     public void registerBeanDefinition(BeanDefinition beanDefinition) {
         this.beanFactory.registerBeanDefinition(beanDefinition);
+    }
+
+    @Override
+    public boolean containsBean(String name) {
+        return this.beanFactory.containsBean(name);
+    }
+
+    @Override
+    public void registerBean(String beanName, Object obj) {
+        this.beanFactory.registerBean(beanName, obj);
+    }
+
+    @Override
+    public boolean isSingleton(String name) {
+        return this.beanFactory.isSingleton(name);
+    }
+
+    @Override
+    public boolean isPrototype(String name) {
+        return this.beanFactory.isPrototype(name);
+    }
+
+    @Override
+    public Class<?> getType(String name) {
+        return this.getClass();
+    }
+
+    @Override
+    public void publishEvent(ApplicationEvent event) {
+
     }
 }
