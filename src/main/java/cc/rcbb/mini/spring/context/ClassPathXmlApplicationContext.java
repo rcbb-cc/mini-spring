@@ -21,6 +21,10 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
     BeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
+        this(fileName, true);
+    }
+
+    public ClassPathXmlApplicationContext(String fileName, boolean isRefresh) {
         // 解析XML文件中的内容
         Resource resource = new ClassPathXmlResource(fileName);
         SimpleBeanFactory beanFactory = new SimpleBeanFactory();
@@ -29,11 +33,19 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
         // 读取BeanDefinition的配置信息，实例化Bean，注入到BeanFactory
         reader.loadBeanDefinitions(resource);
         this.beanFactory = beanFactory;
+        if (!isRefresh) {
+            this.beanFactory.refresh();
+        }
     }
 
     @Override
     public Object getBean(String beanName) throws BeansException {
         return this.beanFactory.getBean(beanName);
+    }
+
+    @Override
+    public void refresh() {
+        this.beanFactory.refresh();
     }
 
     @Override

@@ -15,6 +15,8 @@ public interface BeanFactory {
 
     Object getBean(String beanName) throws BeansException;
 
+    void refresh();
+
     boolean containsBean(String name);
 
     boolean isSingleton(String name);

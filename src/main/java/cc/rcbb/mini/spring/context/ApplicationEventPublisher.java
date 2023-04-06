@@ -5,7 +5,7 @@ package cc.rcbb.mini.spring.context;
  * ApplicationEventPublisher
  * </p>
  *
- * @author lvhao
+ * @author rcbb.cc
  * @date 2023/4/4
  */
 public interface ApplicationEventPublisher {

@@ -5,6 +5,7 @@ import cc.rcbb.mini.spring.beans.factory.*;
 import cc.rcbb.mini.spring.core.Resource;
 import org.dom4j.Element;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,16 +32,7 @@ public class XmlBeanDefinitionReader {
 
             BeanDefinition beanDefinition = new BeanDefinition(beanId, beanClassName);
 
-            List<Element> propertyElements = element.elements("property");
-            PropertyValues propertyValues = new PropertyValues();
-            for (Element e : propertyElements) {
-                String type = e.attributeValue("type");
-                String name = e.attributeValue("name");
-                String value = e.attributeValue("value");
-                propertyValues.addPropertyValue(new PropertyValue(type, name, value));
-            }
-            beanDefinition.setPropertyValues(propertyValues);
-
+            // 处理构造器参数
             List<Element> constructorArgs = element.elements("constructor-arg");
             ArgumentValues argumentValues = new ArgumentValues();
             for (Element e : constructorArgs) {
@@ -50,6 +42,36 @@ public class XmlBeanDefinitionReader {
                 argumentValues.addArgumentValue(new ArgumentValue(type, name, value));
             }
             beanDefinition.setConstructorArgumentValues(argumentValues);
+
+            // 处理属性
+            List<Element> propertyElements = element.elements("property");
+            PropertyValues propertyValues = new PropertyValues();
+            List<String> refList = new ArrayList<>();
+            for (Element e : propertyElements) {
+                String type = e.attributeValue("type");
+                String name = e.attributeValue("name");
+                String value = e.attributeValue("value");
+                String ref = e.attributeValue("ref");
+                String v = "";
+
+                boolean isRef = false;
+                if (value != null && !value.equals("")) {
+                    isRef = false;
+                    v = value;
+                } else if (ref != null && !ref.equals("")) {
+                    isRef = true;
+                    // 如果是ref，则将ref里的值赋值给v
+                    v = ref;
+                    refList.add(ref);
+                }
+                // value填充值是v
+                propertyValues.addPropertyValue(new PropertyValue(type, name, v, isRef));
+            }
+            beanDefinition.setPropertyValues(propertyValues);
+
+            String[] refs = refList.toArray(new String[0]);
+            beanDefinition.setDependsOn(refs);
+
             this.simpleBeanFactory.registerBeanDefinition(beanDefinition);
         }
     }

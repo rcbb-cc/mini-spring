@@ -7,7 +7,7 @@ import cc.rcbb.mini.spring.beans.config.BeanDefinition;
  * BeanDefinitionRegistry
  * </p>
  *
- * @author lvhao
+ * @author rcbb.cc
  * @date 2023/4/4
  */
 public interface BeanDefinitionRegistry {

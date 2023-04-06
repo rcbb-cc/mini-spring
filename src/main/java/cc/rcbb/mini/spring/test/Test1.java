@@ -17,7 +17,6 @@ public class Test1 {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
         AServiceImpl aservice = (AServiceImpl) ctx.getBean("aservice");
         aservice.sayHello();
-        System.out.println(aservice.getName());
     }
 
 }

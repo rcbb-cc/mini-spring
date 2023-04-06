@@ -5,20 +5,22 @@ package cc.rcbb.mini.spring.beans.factory;
  * PropertyValue
  * </p>
  *
- * @author lvhao
+ * @author rcbb.cc
  * @date 2023/4/4
  */
 public class PropertyValue {
 
     private final String type;
     private final String name;
-
     private final Object value;
 
-    public PropertyValue(String type, String name, Object value) {
+    private final boolean isRef;
+
+    public PropertyValue(String type, String name, Object value, boolean isRef) {
         this.type = type;
         this.name = name;
         this.value = value;
+        this.isRef = isRef;
     }
 
     public String getType() {
@@ -32,4 +34,9 @@ public class PropertyValue {
     public Object getValue() {
         return value;
     }
+
+    public boolean getIsRef() {
+        return isRef;
+    }
+
 }

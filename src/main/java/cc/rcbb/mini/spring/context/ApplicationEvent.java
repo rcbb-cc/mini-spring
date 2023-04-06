@@ -7,7 +7,7 @@ import java.util.EventObject;
  * ApplicationEvent
  * </p>
  *
- * @author lvhao
+ * @author rcbb.cc
  * @date 2023/4/4
  */
 public class ApplicationEvent extends EventObject {

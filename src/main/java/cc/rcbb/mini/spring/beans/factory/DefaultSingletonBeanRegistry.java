@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * DefaultSingletonBeanRegistry
  * </p>
  *
- * @author lvhao
+ * @author rcbb.cc
  * @date 2023/4/4
  */
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
