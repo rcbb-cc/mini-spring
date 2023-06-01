@@ -33,7 +33,7 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
         // 读取BeanDefinition的配置信息，实例化Bean，注入到BeanFactory
         reader.loadBeanDefinitions(resource);
         this.beanFactory = beanFactory;
-        if (!isRefresh) {
+        if (isRefresh) {
             this.beanFactory.refresh();
         }
     }
