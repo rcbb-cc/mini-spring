@@ -18,7 +18,7 @@ public class AServiceImpl implements AService {
 
     private String property2;
 
-    private BaseService ref1;
+    private BaseService baseService;
 
     public AServiceImpl() {
     }
@@ -42,11 +42,11 @@ public class AServiceImpl implements AService {
         this.property2 = property2;
     }
 
-    public BaseService getRef1() {
-        return ref1;
+    public BaseService getBaseService() {
+        return baseService;
     }
 
-    public void setRef1(BaseService ref1) {
-        this.ref1 = ref1;
+    public void setBaseService(BaseService baseService) {
+        this.baseService = baseService;
     }
 }

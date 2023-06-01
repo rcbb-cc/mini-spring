@@ -1,25 +1,25 @@
-package cc.rcbb.mini.spring.beans.factory;
+package cc.rcbb.mini.spring.beans.factory.config;
 
 /**
  * <p>
- * ArgumentValue
+ * ConstructorArgumentValue
  * </p>
  *
  * @author rcbb.cc
  * @date 2023/4/4
  */
-public class ArgumentValue {
+public class ConstructorArgumentValue {
 
     private Object value;
     private String type;
     private String name;
 
-    public ArgumentValue(String type, Object value) {
+    public ConstructorArgumentValue(String type, Object value) {
         this.value = value;
         this.type = type;
     }
 
-    public ArgumentValue(String type, String name, Object value) {
+    public ConstructorArgumentValue(String type, String name, Object value) {
         this.value = value;
         this.type = type;
         this.name = name;

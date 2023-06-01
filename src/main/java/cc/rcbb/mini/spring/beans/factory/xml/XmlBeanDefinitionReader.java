@@ -1,7 +1,11 @@
 package cc.rcbb.mini.spring.beans.factory.xml;
 
-import cc.rcbb.mini.spring.beans.config.BeanDefinition;
-import cc.rcbb.mini.spring.beans.factory.*;
+import cc.rcbb.mini.spring.beans.factory.PropertyValue;
+import cc.rcbb.mini.spring.beans.factory.PropertyValues;
+import cc.rcbb.mini.spring.beans.factory.config.BeanDefinition;
+import cc.rcbb.mini.spring.beans.factory.config.ConstructorArgumentValue;
+import cc.rcbb.mini.spring.beans.factory.config.ConstructorArgumentValues;
+import cc.rcbb.mini.spring.beans.factory.support.AbstractBeanFactory;
 import cc.rcbb.mini.spring.core.Resource;
 import org.dom4j.Element;
 
@@ -18,10 +22,10 @@ import java.util.List;
  */
 public class XmlBeanDefinitionReader {
 
-    SimpleBeanFactory simpleBeanFactory;
+    AbstractBeanFactory beanFactory;
 
-    public XmlBeanDefinitionReader(SimpleBeanFactory simpleBeanFactory) {
-        this.simpleBeanFactory = simpleBeanFactory;
+    public XmlBeanDefinitionReader(AbstractBeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
     }
 
     public void loadBeanDefinitions(Resource resource) {
@@ -34,14 +38,14 @@ public class XmlBeanDefinitionReader {
 
             // 处理构造器参数
             List<Element> constructorArgs = element.elements("constructor-arg");
-            ArgumentValues argumentValues = new ArgumentValues();
+            ConstructorArgumentValues constructorArgumentValues = new ConstructorArgumentValues();
             for (Element e : constructorArgs) {
                 String type = e.attributeValue("type");
                 String name = e.attributeValue("name");
                 String value = e.attributeValue("value");
-                argumentValues.addArgumentValue(new ArgumentValue(type, name, value));
+                constructorArgumentValues.addArgumentValue(new ConstructorArgumentValue(type, name, value));
             }
-            beanDefinition.setConstructorArgumentValues(argumentValues);
+            beanDefinition.setConstructorArgumentValues(constructorArgumentValues);
 
             // 处理属性
             List<Element> propertyElements = element.elements("property");
@@ -72,7 +76,7 @@ public class XmlBeanDefinitionReader {
             String[] refArray = refList.toArray(new String[0]);
             beanDefinition.setDependsOn(refArray);
 
-            this.simpleBeanFactory.registerBeanDefinition(beanId, beanDefinition);
+            this.beanFactory.registerBeanDefinition(beanId, beanDefinition);
         }
     }
 

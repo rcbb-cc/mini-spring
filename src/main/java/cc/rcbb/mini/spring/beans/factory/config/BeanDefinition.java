@@ -1,6 +1,5 @@
-package cc.rcbb.mini.spring.beans.config;
+package cc.rcbb.mini.spring.beans.factory.config;
 
-import cc.rcbb.mini.spring.beans.factory.ArgumentValues;
 import cc.rcbb.mini.spring.beans.factory.PropertyValues;
 
 /**
@@ -19,7 +18,7 @@ public class BeanDefinition {
 
     private String[] dependsOn;
 
-    private ArgumentValues constructorArgumentValues;
+    private ConstructorArgumentValues constructorArgumentValues;
 
     private PropertyValues propertyValues;
 
@@ -69,13 +68,13 @@ public class BeanDefinition {
         this.dependsOn = dependsOn;
     }
 
-    public ArgumentValues getConstructorArgumentValues() {
+    public ConstructorArgumentValues getConstructorArgumentValues() {
         return constructorArgumentValues;
     }
 
-    public void setConstructorArgumentValues(ArgumentValues constructorArgumentValues) {
+    public void setConstructorArgumentValues(ConstructorArgumentValues constructorArgumentValues) {
         this.constructorArgumentValues =
-                (constructorArgumentValues != null ? constructorArgumentValues : new ArgumentValues());
+                (constructorArgumentValues != null ? constructorArgumentValues : new ConstructorArgumentValues());
     }
 
     public PropertyValues getPropertyValues() {

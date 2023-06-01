@@ -1,7 +1,4 @@
-package cc.rcbb.mini.spring.beans.factory;
-
-import cc.rcbb.mini.spring.beans.BeansException;
-import cc.rcbb.mini.spring.beans.config.BeanDefinition;
+package cc.rcbb.mini.spring.beans.factory.config;
 
 /**
  * <p>

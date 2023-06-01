@@ -10,13 +10,13 @@ package cc.rcbb.mini.spring.test;
  */
 public class BaseBaseService {
 
-    private AServiceImpl as;
+    private AServiceImpl aService;
 
-    public AServiceImpl getAs() {
-        return as;
+    public AServiceImpl getAService() {
+        return aService;
     }
-    public void setAs(AServiceImpl as) {
-        this.as = as;
+    public void setAService(AServiceImpl aService) {
+        this.aService = aService;
     }
     public BaseBaseService() {
     }

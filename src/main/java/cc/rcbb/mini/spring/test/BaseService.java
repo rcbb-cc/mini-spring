@@ -1,5 +1,7 @@
 package cc.rcbb.mini.spring.test;
 
+import cc.rcbb.mini.spring.beans.factory.annotation.Autowired;
+
 /**
  * <p>
  * BaseService
@@ -10,19 +12,23 @@ package cc.rcbb.mini.spring.test;
  */
 public class BaseService {
 
-    private BaseBaseService bbs;
+    @Autowired
+    private BaseBaseService baseBaseService;
 
-    public BaseBaseService getBbs() {
-        return bbs;
+    public BaseBaseService getBaseBaseService() {
+        return baseBaseService;
     }
-    public void setBbs(BaseBaseService bbs) {
-        this.bbs = bbs;
+
+    public void setBaseBaseService(BaseBaseService baseBaseService) {
+        this.baseBaseService = baseBaseService;
     }
+
     public BaseService() {
     }
+
     public void sayHello() {
         System.out.print("Base Service says hello");
-        bbs.sayHello();
+        baseBaseService.sayHello();
     }
 
 }

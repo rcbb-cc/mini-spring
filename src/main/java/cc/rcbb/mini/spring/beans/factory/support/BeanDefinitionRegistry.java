@@ -1,6 +1,6 @@
-package cc.rcbb.mini.spring.beans.factory;
+package cc.rcbb.mini.spring.beans.factory.support;
 
-import cc.rcbb.mini.spring.beans.config.BeanDefinition;
+import cc.rcbb.mini.spring.beans.factory.config.BeanDefinition;
 
 /**
  * <p>

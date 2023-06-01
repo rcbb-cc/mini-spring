@@ -1,6 +1,5 @@
 package cc.rcbb.mini.spring.beans.factory;
 
-import cc.rcbb.mini.spring.beans.config.BeanDefinition;
 import cc.rcbb.mini.spring.beans.BeansException;
 
 /**
@@ -13,9 +12,9 @@ import cc.rcbb.mini.spring.beans.BeansException;
  */
 public interface BeanFactory {
 
-    Object getBean(String beanName) throws BeansException;
-
     void refresh();
+
+    Object getBean(String beanName) throws BeansException;
 
     boolean containsBean(String name);
 
@@ -24,8 +23,6 @@ public interface BeanFactory {
     boolean isPrototype(String name);
 
     void registerBean(String beanName, Object obj);
-
-    void registerBeanDefinition(BeanDefinition beanDefinition);
 
     Class<?> getType(String name);
 
