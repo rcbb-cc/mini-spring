@@ -1,8 +1,7 @@
 package cc.rcbb.mini.spring.beans.factory.support;
 
 import cc.rcbb.mini.spring.beans.BeansException;
-import java.util.ArrayList;
-import java.util.List;
+import cc.rcbb.mini.spring.beans.factory.BeanFactory;
 
 /**
  * <p>
@@ -12,48 +11,14 @@ import java.util.List;
  * @author rcbb.cc
  * @date 2023/6/1
  */
-public class AutowireCapableBeanFactory extends AbstractBeanFactory {
+public interface AutowireCapableBeanFactory extends BeanFactory {
 
-    private final List<AutowiredAnnotationBeanPostProcessor> beanPostProcessorList = new ArrayList<>();
+    int AUTOWIRE_NO = 0;
+    int AUTOWIRE_BY_NAME = 1;
+    int AUTOWIRE_BY_TYPE = 2;
 
-    public void addBeanPostProcessor(AutowiredAnnotationBeanPostProcessor beanPostProcessor) {
-        this.beanPostProcessorList.remove(beanPostProcessor);
-        this.beanPostProcessorList.add(beanPostProcessor);
-    }
+    Object applyBeanPostProcessorsBeforeInitialization(Object singleton, String beanName) throws BeansException;
 
-    public int getBeanPostProcessorCount() {
-        return this.beanPostProcessorList.size();
-    }
-
-    public List<AutowiredAnnotationBeanPostProcessor> getBeanPostProcessorList() {
-        return this.beanPostProcessorList;
-    }
-
-    @Override
-    public Object applyBeanPostProcessorsBeforeInitialization(Object singleton, String beanName) throws BeansException {
-        Object result = singleton;
-        for (AutowiredAnnotationBeanPostProcessor beanPostProcessor : getBeanPostProcessorList()) {
-            beanPostProcessor.setBeanFactory(this);
-            result = beanPostProcessor.postProcessBeforeInitialization(result, beanName);
-            if (result == null) {
-                return result;
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public Object applyBeanPostProcessorsAfterInitialization(Object singleton, String beanName) throws BeansException {
-        Object result = singleton;
-        for (AutowiredAnnotationBeanPostProcessor beanPostProcessor : getBeanPostProcessorList()) {
-            beanPostProcessor.setBeanFactory(this);
-            result = beanPostProcessor.postProcessAfterInitialization(result, beanName);
-            if (result == null) {
-                return result;
-            }
-        }
-        return result;
-    }
-
+    Object applyBeanPostProcessorsAfterInitialization(Object singleton, String beanName) throws BeansException;
 
 }

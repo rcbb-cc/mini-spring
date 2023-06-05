@@ -12,7 +12,7 @@ import cc.rcbb.mini.spring.beans.BeansException;
  */
 public interface BeanFactory {
 
-    void refresh();
+    void refresh() throws BeansException, IllegalStateException;
 
     Object getBean(String beanName) throws BeansException;
 

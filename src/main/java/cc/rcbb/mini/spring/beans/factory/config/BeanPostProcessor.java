@@ -1,6 +1,7 @@
 package cc.rcbb.mini.spring.beans.factory.config;
 
 import cc.rcbb.mini.spring.beans.BeansException;
+import cc.rcbb.mini.spring.beans.factory.BeanFactory;
 
 /**
  * <p>
@@ -15,5 +16,7 @@ public interface BeanPostProcessor {
     Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException;
 
     Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException;
+
+    void setBeanFactory(BeanFactory beanFactory);
 
 }

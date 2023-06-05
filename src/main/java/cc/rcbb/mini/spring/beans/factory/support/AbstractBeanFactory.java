@@ -1,7 +1,7 @@
 package cc.rcbb.mini.spring.beans.factory.support;
 
 import cc.rcbb.mini.spring.beans.BeansException;
-import cc.rcbb.mini.spring.beans.factory.BeanFactory;
+import cc.rcbb.mini.spring.beans.factory.ConfigurableBeanFactory;
 import cc.rcbb.mini.spring.beans.factory.PropertyValue;
 import cc.rcbb.mini.spring.beans.factory.PropertyValues;
 import cc.rcbb.mini.spring.beans.factory.config.BeanDefinition;
@@ -25,10 +25,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author rcbb.cc
  * @date 2023/4/11
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory, BeanDefinitionRegistry {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory, BeanDefinitionRegistry {
 
-    private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
-    private List<String> beanDefinitionNameList = new ArrayList<>();
+    protected Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
+    protected List<String> beanDefinitionNameList = new ArrayList<>();
     private final Map<String, Object> earlySingletonObjectMap = new HashMap<>(16);
 
     public AbstractBeanFactory() {
@@ -89,9 +89,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         }
     }
 
-    abstract public Object applyBeanPostProcessorsBeforeInitialization(Object singleton, String beanName) throws BeansException;
 
-    abstract public Object applyBeanPostProcessorsAfterInitialization(Object singleton, String beanName) throws BeansException;
 
     private Object createBean(BeanDefinition beanDefinition) {
         Class<?> clz = null;
@@ -286,5 +284,9 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     public boolean containsBeanDefinition(String name) {
         return this.beanDefinitionMap.containsKey(name);
     }
+
+    abstract public Object applyBeanPostProcessorsBeforeInitialization(Object singleton, String beanName) throws BeansException;
+
+    abstract public Object applyBeanPostProcessorsAfterInitialization(Object singleton, String beanName) throws BeansException;
 
 }

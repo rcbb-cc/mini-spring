@@ -14,7 +14,7 @@ public interface SingletonBeanRegistry {
 
     Object getSingleton(String beanName);
 
-    Boolean containsSingleton(String beanName);
+    boolean containsSingleton(String beanName);
 
     String[] getSingletonNames();
 

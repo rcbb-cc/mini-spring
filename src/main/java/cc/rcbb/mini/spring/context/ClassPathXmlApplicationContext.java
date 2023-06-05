@@ -1,8 +1,8 @@
 package cc.rcbb.mini.spring.context;
 
 import cc.rcbb.mini.spring.beans.BeansException;
-import cc.rcbb.mini.spring.beans.factory.BeanFactory;
-import cc.rcbb.mini.spring.beans.factory.support.AutowireCapableBeanFactory;
+import cc.rcbb.mini.spring.beans.factory.ConfigurableListableBeanFactory;
+import cc.rcbb.mini.spring.beans.factory.DefaultListableBeanFactory;
 import cc.rcbb.mini.spring.beans.factory.support.AutowiredAnnotationBeanPostProcessor;
 import cc.rcbb.mini.spring.beans.factory.xml.XmlBeanDefinitionReader;
 import cc.rcbb.mini.spring.core.ClassPathXmlResource;
@@ -16,9 +16,9 @@ import cc.rcbb.mini.spring.core.Resource;
  * @author rcbb.cc
  * @date 2023/4/3
  */
-public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationEventPublisher {
+public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
 
-    AutowireCapableBeanFactory beanFactory;
+    DefaultListableBeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
         this(fileName, true);
@@ -27,7 +27,7 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
     public ClassPathXmlApplicationContext(String fileName, boolean isRefresh) {
         // 解析XML文件中的内容
         Resource resource = new ClassPathXmlResource(fileName);
-        AutowireCapableBeanFactory beanFactory = new AutowireCapableBeanFactory();
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         // 加载解析内容，构建BeanDefinition
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
         // 读取BeanDefinition的配置信息，实例化Bean，注入到BeanFactory
@@ -49,11 +49,12 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
         onRefresh();
     }
 
-    private void registerBeanPostProcessors(AutowireCapableBeanFactory beanFactory) {
+    private void registerBeanPostProcessors(DefaultListableBeanFactory beanFactory) {
         beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
     }
 
-    private void onRefresh() {
+    @Override
+    public void onRefresh() {
         this.beanFactory.refresh();
     }
 
@@ -83,7 +84,43 @@ public class ClassPathXmlApplicationContext implements BeanFactory, ApplicationE
     }
 
     @Override
-    public void publishEvent(ApplicationEvent event) {
+    void registerListeners() {
+        ApplicationListener listener = new ApplicationListener();
+        this.getApplicationEventPublisher().addApplicationListener(listener);
+    }
 
+    @Override
+    void initApplicationEventPublisher() {
+        ApplicationEventPublisher aep = new SimpleApplicationEventPublisher();
+        this.setApplicationEventPublisher(aep);
+    }
+
+    @Override
+    void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
+    }
+
+    @Override
+    public void publishEvent(ApplicationEvent event) {
+        this.getApplicationEventPublisher().publishEvent(event);
+    }
+
+    @Override
+    public void addApplicationListener(ApplicationListener listener) {
+        this.getApplicationEventPublisher().addApplicationListener(listener);
+    }
+
+    @Override
+    void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+        this.beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
+    }
+
+    @Override
+    public ConfigurableListableBeanFactory getBeanFactory() throws IllegalStateException {
+        return this.beanFactory;
+    }
+
+    @Override
+    void finishRefresh() {
+        publishEvent(new ContextRefreshEvent("Context Refreshed..."));
     }
 }
