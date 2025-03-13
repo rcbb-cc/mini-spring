@@ -1,4 +1,4 @@
-package cc.rcbb.mini.spring;
+package cc.rcbb.mini.spring.beans;
 
 /**
  * <p>
