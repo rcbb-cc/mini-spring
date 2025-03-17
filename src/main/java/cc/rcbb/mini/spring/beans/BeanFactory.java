@@ -10,8 +10,16 @@ package cc.rcbb.mini.spring.beans;
  */
 public interface BeanFactory {
 
-    Object getBean(String beanName) throws BeansException;
+    Object getBean(String name) throws BeansException;
 
-    void registerBeanDefinition(BeanDefinition beanDefinition);
+    //void registerBeanDefinition(BeanDefinition beanDefinition);
+
+    boolean containsBean(String name);
+
+    boolean isSingleton(String name);
+
+    boolean isPrototype(String name);
+
+    Class<?> getType(String name);
 
 }

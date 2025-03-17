@@ -14,22 +14,38 @@ import cc.rcbb.mini.spring.core.Resource;
  */
 public class ClassPathXmlApplicationContext implements BeanFactory {
 
-    private BeanFactory beanFactory;
+    private SimpleBeanFactory simpleBeanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
         Resource resource = new ClassPathXmlResource(fileName);
-        this.beanFactory = new SimpleBeanFactory();
-        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this.beanFactory);
+        this.simpleBeanFactory = new SimpleBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this.simpleBeanFactory);
         reader.loadBeanDefinitions(resource);
     }
 
     @Override
     public Object getBean(String beanName) throws BeansException {
-        return this.beanFactory.getBean(beanName);
+        return this.simpleBeanFactory.getBean(beanName);
     }
 
     @Override
-    public void registerBeanDefinition(BeanDefinition beanDefinition) {
-        this.beanFactory.registerBeanDefinition(beanDefinition);
+    public boolean containsBean(String name) {
+        return this.containsBean(name);
     }
+
+    @Override
+    public boolean isSingleton(String name) {
+        return false;
+    }
+
+    @Override
+    public boolean isPrototype(String name) {
+        return false;
+    }
+
+    @Override
+    public Class<?> getType(String name) {
+        return null;
+    }
+
 }
