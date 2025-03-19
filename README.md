@@ -33,6 +33,8 @@
 
 ![原始IoC](https://rcbb-blog.oss-cn-guangzhou.aliyuncs.com/2025/03/20250313103353-cd43e4.png?x-oss-process=style/yuantu_shuiyin)
 
+# 02｜扩展Bean：如何配置constructor、property和init-method？
+
 ## ioc-03 优化
 
 - 扩展 BeanDefinition，增加属性。
@@ -57,3 +59,32 @@
 > 如果它既想获得能力又想对外提供能力，那么它可以同时声明实现接口和继承接口的某些实现类，再自己修改增强某些方法。
 
 ![扩展Bean](https://rcbb-blog.oss-cn-guangzhou.aliyuncs.com/2025/03/20250317143221-3f19e2.png?x-oss-process=style/yuantu_shuiyin)
+
+# 03｜依赖注入：如何给Bean注入值并解决循环依赖问题？
+
+## ioc-04 优化
+
+- BeanDefinition 中 dependsOn 完善。
+- 解决循环依赖。SimpleBeanFactory 中增加 earlySingletonObjects。
+- PropertyValue 中增加 isRef(是否是引用) 字段。
+
+总结：
+当前这里解决循环依赖问题，使用了两个缓存。Spring 源码实现中还有一个 bean 实例工厂缓存。
+Spring 三级缓存机制：
+- singletonObjects：用于存储完全创建好的单例 bean 实例。
+- earlySingletonObjects：用于存储早期创建但未完成初始化的单例 bean 实例。
+- singletonFactories：用于存储单例 bean 的工厂。
+
+当 Spring 发现两个或更多个 bean 之间存在循环依赖关系时，它会将其中一个 bean 创建的过程中尚未完成的实例放入 earlySingletonObjects 缓存中，然后将创建该 bean 的工厂对象放入 singletonFactories 缓存中。
+接着，Spring 会暂停当前 bean 的创建过程，去创建它所依赖的 bean。
+当依赖的 bean 创建完成后，Spring 会将其放入 singletonObjects 缓存中，并使用它来完成当前 bean 的创建过程。
+在创建当前bean的过程中，如果发现它还依赖其他的 bean，Spring 会重复上述过程，直到所有 bean 的创建过程都完成为止。
+
+需要注意的是，当使用构造函数注入方式时，循环依赖是无法解决的。
+因为在创建 bean 时，必须先创建它所依赖的 bean 实例，而构造函数注入方式需要在创建 bean 实例时就将依赖的 bean 实例传入构造函数中。
+如果依赖的 bean 实例尚未创建完成，就无法将其传入构造函数中，从而导致循环依赖无法解决。
+此时，可以考虑使用 setter 注入方式来解决循环依赖问题。
+
+Spring 对于循环依赖的支持，反而导致了程序员写出了坏味道代码而不自知。
+所以 Spring 官方也建议大家使用构造器注入，一个是避免写出这种层级依赖不清晰的糟糕代码，二是也方便了后续单元测试的编写。
+从 Spring 6 开始，默认情况下，Spring 不再支持构造器注入场景下的循环依赖，同时也不再鼓励使用 setter 或字段注入来解决循环依赖。

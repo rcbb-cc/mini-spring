@@ -31,8 +31,8 @@ public class PropertyValues {
         this.propertyValueList.add(propertyValue);
     }
 
-    public void addPropertyValue(String propertyType, String propertyName, Object propertyValue) {
-        addPropertyValue(new PropertyValue(propertyType, propertyName, propertyValue));
+    public void addPropertyValue(String propertyType, String propertyName, Object propertyValue, boolean isRef) {
+        addPropertyValue(new PropertyValue(propertyType, propertyName, propertyValue, isRef));
     }
 
     public void removePropertyValue(PropertyValue propertyValue) {

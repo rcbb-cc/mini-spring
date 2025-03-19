@@ -14,6 +14,7 @@ public class AServiceImpl implements AService {
     private int level;
     private String property1;
     private String property2;
+    private BaseService baseService;
 
     public AServiceImpl() {
     }
@@ -54,6 +55,14 @@ public class AServiceImpl implements AService {
 
     public void setProperty2(String property2) {
         this.property2 = property2;
+    }
+
+    public BaseService getBaseService() {
+        return baseService;
+    }
+
+    public void setBaseService(BaseService baseService) {
+        this.baseService = baseService;
     }
 
     @Override

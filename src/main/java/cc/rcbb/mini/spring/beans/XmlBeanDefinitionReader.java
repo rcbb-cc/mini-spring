@@ -43,10 +43,16 @@ public class XmlBeanDefinitionReader {
             List<Element> propertyElements = element.elements("property");
             PropertyValues propertyValues = new PropertyValues();
             for (Element propertyElement : propertyElements) {
+                boolean isRef = false;
+                String ref = propertyElement.attributeValue("ref");
+                if (ref != null && ref != "") {
+                    isRef = true;
+                }
                 PropertyValue propertyValue = new PropertyValue(
                         propertyElement.attributeValue("type"),
                         propertyElement.attributeValue("name"),
-                        propertyElement.attributeValue("value")
+                        isRef ? ref : propertyElement.attributeValue("value"),
+                        isRef
                 );
                 propertyValues.addPropertyValue(propertyValue);
             }
