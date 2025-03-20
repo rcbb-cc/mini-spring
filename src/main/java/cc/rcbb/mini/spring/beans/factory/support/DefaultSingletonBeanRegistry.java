@@ -1,4 +1,6 @@
-package cc.rcbb.mini.spring.beans;
+package cc.rcbb.mini.spring.beans.factory.support;
+
+import cc.rcbb.mini.spring.beans.factory.config.SingletonBeanRegistry;
 
 import java.util.ArrayList;
 import java.util.List;

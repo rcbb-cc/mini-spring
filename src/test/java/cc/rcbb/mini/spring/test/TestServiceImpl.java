@@ -8,7 +8,7 @@ package cc.rcbb.mini.spring.test;
  * @author rcbb.cc
  * @date 2025/3/13
  */
-public class AServiceImpl implements AService {
+public class TestServiceImpl implements TestService {
 
     private String name;
     private int level;
@@ -16,10 +16,10 @@ public class AServiceImpl implements AService {
     private String property2;
     private BaseService baseService;
 
-    public AServiceImpl() {
+    public TestServiceImpl() {
     }
 
-    public AServiceImpl(String name, int level) {
+    public TestServiceImpl(String name, int level) {
         this.name = name;
         this.level = level;
         System.out.println(this.name + "," + this.level);

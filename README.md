@@ -68,9 +68,9 @@
 - 解决循环依赖。SimpleBeanFactory 中增加 earlySingletonObjects。
 - PropertyValue 中增加 isRef(是否是引用) 字段。
 
-总结：
-当前这里解决循环依赖问题，使用了两个缓存。Spring 源码实现中还有一个 bean 实例工厂缓存。
-Spring 三级缓存机制：
+总结：   
+当前这里解决循环依赖问题，使用了两个缓存。Spring 源码实现中还有一个 bean 实例工厂缓存。    
+Spring 三级缓存机制：   
 - singletonObjects：用于存储完全创建好的单例 bean 实例。
 - earlySingletonObjects：用于存储早期创建但未完成初始化的单例 bean 实例。
 - singletonFactories：用于存储单例 bean 的工厂。
@@ -88,3 +88,23 @@ Spring 三级缓存机制：
 Spring 对于循环依赖的支持，反而导致了程序员写出了坏味道代码而不自知。
 所以 Spring 官方也建议大家使用构造器注入，一个是避免写出这种层级依赖不清晰的糟糕代码，二是也方便了后续单元测试的编写。
 从 Spring 6 开始，默认情况下，Spring 不再支持构造器注入场景下的循环依赖，同时也不再鼓励使用 setter 或字段注入来解决循环依赖。
+
+# 04｜增强IoC容器：如何让我们的Spring支持注解？
+
+## ioc-04 优化
+
+- 项目代码结构。beans 目录下新增 factory 目录，factory 目录中新增 xml、support、config 和 annotation。
+- ArgumentValue、ArgumentValues 修改为 ConstructorArgumentValue、ConstructorArgumentValues。
+- Autowired：注解，修饰成员变量，并且在运行时生效。
+- BeanPostProcess：Bean 处理器。
+- AutowiredAnnotationBeanPostProcessor：Autowired 注解处理器，用于处理 @Autowired 注解，完成自动注入。
+- AbstractBeanFactory：抽象 BeanFactory，继承 DefaultSingletonBeanRegistry，实现 BeanFactory、BeanDefinitionRegistry 接口，提供 BeanFactory 的通用功能。完善了 对 Bean 初始化前、初始化和初始化后的处理。
+- AutowireCapableBeanFactory：继承 AbstractBeanFactory，核心在于 postProcessBeforeInitialization、postProcessAfterInitialization 的实现。
+
+总结：  
+解耦分为两种：设计上的解耦、实现类上的解耦。    
+通过抽取 AbstractBeanFactory，把 BeanPostProcessor 的设计与 BeanFactory 本身解耦。
+AutowireCapableBeanFactory 再通过定义 BeanPostProcessor 接口类型的属性，向外提供属性设置的方法，做到了和 BeanPostProcessor 实现类的解耦。
+最后在 ClassPathXmlApplicationContext 中统一注册 BeanPostProcessor，再抽取成一个启动方法，非常优雅。
+
+![增强IoC容器](https://rcbb-blog.oss-cn-guangzhou.aliyuncs.com/2025/03/20250320163939-63270a.png?x-oss-process=style/yuantu_shuiyin)

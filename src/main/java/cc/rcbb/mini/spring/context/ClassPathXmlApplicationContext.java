@@ -1,6 +1,10 @@
 package cc.rcbb.mini.spring.context;
 
-import cc.rcbb.mini.spring.beans.*;
+import cc.rcbb.mini.spring.beans.BeansException;
+import cc.rcbb.mini.spring.beans.factory.BeanFactory;
+import cc.rcbb.mini.spring.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
+import cc.rcbb.mini.spring.beans.factory.config.AutowireCapableBeanFactory;
+import cc.rcbb.mini.spring.beans.factory.xml.XmlBeanDefinitionReader;
 import cc.rcbb.mini.spring.core.ClassPathXmlResource;
 import cc.rcbb.mini.spring.core.Resource;
 
@@ -14,18 +18,47 @@ import cc.rcbb.mini.spring.core.Resource;
  */
 public class ClassPathXmlApplicationContext implements BeanFactory {
 
-    private SimpleBeanFactory simpleBeanFactory;
+    private AutowireCapableBeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
-        Resource resource = new ClassPathXmlResource(fileName);
-        this.simpleBeanFactory = new SimpleBeanFactory();
-        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this.simpleBeanFactory);
-        reader.loadBeanDefinitions(resource);
+        this(fileName, true);
     }
+
+    public ClassPathXmlApplicationContext(String fileName, boolean isRefresh) {
+        Resource resource = new ClassPathXmlResource(fileName);
+        AutowireCapableBeanFactory beanFactory = new AutowireCapableBeanFactory();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
+        reader.loadBeanDefinitions(resource);
+
+        this.beanFactory = beanFactory;
+        if (isRefresh) {
+            try {
+                this.refresh();
+            } catch (BeansException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void refresh() throws BeansException, IllegalStateException {
+        this.registerBeanPostProcessors(this.beanFactory);
+        this.onRefresh();
+    }
+
+    private void registerBeanPostProcessors(AutowireCapableBeanFactory beanFactory) {
+        //if (supportAutowire) {
+        beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
+        //}
+    }
+
+    private void onRefresh() {
+        this.beanFactory.refresh();
+    }
+
 
     @Override
     public Object getBean(String beanName) throws BeansException {
-        return this.simpleBeanFactory.getBean(beanName);
+        return this.beanFactory.getBean(beanName);
     }
 
     @Override

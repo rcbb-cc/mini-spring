@@ -15,13 +15,13 @@ public class Test1 {
 
     public static void main(String[] args) throws BeansException {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("beans.xml");
-        AService aService = (AService) ctx.getBean("aservice");
-        aService.sayHello();
+        TestService testService = (TestService) ctx.getBean("testService");
+        testService.sayHello();
 
-        BaseBaseService baseBaseService = (BaseBaseService) ctx.getBean("basebaseservice");
+        BaseBaseService baseBaseService = (BaseBaseService) ctx.getBean("baseBaseService");
         baseBaseService.sayHello();
 
-        BaseService baseService = (BaseService) ctx.getBean("baseservice");
+        BaseService baseService = (BaseService) ctx.getBean("baseService");
         baseService.sayHello();
     }
 

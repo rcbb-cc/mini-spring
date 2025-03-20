@@ -9,14 +9,14 @@ package cc.rcbb.mini.spring.test;
  * @date 2025/3/19
  */
 public class BaseBaseService {
-    private AServiceImpl as;
+    private TestServiceImpl testService;
 
-    public AServiceImpl getAs() {
-        return as;
+    public TestServiceImpl getTestService() {
+        return testService;
     }
 
-    public void setAs(AServiceImpl as) {
-        this.as = as;
+    public void setTestService(TestServiceImpl testService) {
+        this.testService = testService;
     }
 
     public BaseBaseService() {

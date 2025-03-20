@@ -1,5 +1,7 @@
 package cc.rcbb.mini.spring.test;
 
+import cc.rcbb.mini.spring.beans.factory.annotation.Autowired;
+
 /**
  * <p>
  * BaseService
@@ -9,6 +11,7 @@ package cc.rcbb.mini.spring.test;
  * @date 2025/3/19
  */
 public class BaseService {
+    @Autowired
     private BaseBaseService baseBaseService;
 
     public BaseBaseService getBaseBaseService() {

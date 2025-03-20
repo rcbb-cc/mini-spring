@@ -1,5 +1,11 @@
-package cc.rcbb.mini.spring.beans;
+package cc.rcbb.mini.spring.beans.factory.xml;
 
+import cc.rcbb.mini.spring.beans.BeanDefinition;
+import cc.rcbb.mini.spring.beans.PropertyValue;
+import cc.rcbb.mini.spring.beans.PropertyValues;
+import cc.rcbb.mini.spring.beans.factory.config.ConstructorArgumentValue;
+import cc.rcbb.mini.spring.beans.factory.config.ConstructorArgumentValues;
+import cc.rcbb.mini.spring.beans.factory.support.AbstractBeanFactory;
 import cc.rcbb.mini.spring.core.Resource;
 import org.dom4j.Element;
 
@@ -15,10 +21,10 @@ import java.util.List;
  */
 public class XmlBeanDefinitionReader {
 
-    private SimpleBeanFactory simpleBeanFactory;
+    private AbstractBeanFactory beanFactory;
 
-    public XmlBeanDefinitionReader(SimpleBeanFactory simpleBeanFactory) {
-        this.simpleBeanFactory = simpleBeanFactory;
+    public XmlBeanDefinitionReader(AbstractBeanFactory simpleBeanFactory) {
+        this.beanFactory = simpleBeanFactory;
     }
 
     public void loadBeanDefinitions(Resource resource) {
@@ -29,9 +35,9 @@ public class XmlBeanDefinitionReader {
             BeanDefinition beanDefinition = new BeanDefinition(beanID, beanClassName);
 
             List<Element> constructorElements = element.elements("constructor-arg");
-            ArgumentValues argumentValues = new ArgumentValues();
+            ConstructorArgumentValues argumentValues = new ConstructorArgumentValues();
             for (Element constructorElement : constructorElements) {
-                ArgumentValue argumentValue = new ArgumentValue(
+                ConstructorArgumentValue argumentValue = new ConstructorArgumentValue(
                         constructorElement.attributeValue("type"),
                         constructorElement.attributeValue("name"),
                         constructorElement.attributeValue("value")
@@ -58,7 +64,7 @@ public class XmlBeanDefinitionReader {
             }
             beanDefinition.setPropertyValues(propertyValues);
 
-            this.simpleBeanFactory.registerBeanDefinition(beanID, beanDefinition);
+            this.beanFactory.registerBeanDefinition(beanID, beanDefinition);
         }
     }
 

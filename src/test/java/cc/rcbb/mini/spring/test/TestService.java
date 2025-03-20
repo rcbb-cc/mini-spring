@@ -8,7 +8,7 @@ package cc.rcbb.mini.spring.test;
  * @author rcbb.cc
  * @date 2025/3/13
  */
-public interface AService {
+public interface TestService {
 
     void sayHello();
 

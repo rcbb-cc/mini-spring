@@ -1,4 +1,4 @@
-package cc.rcbb.mini.spring.beans;
+package cc.rcbb.mini.spring.beans.factory.config;
 
 /**
  * <p>
@@ -8,18 +8,18 @@ package cc.rcbb.mini.spring.beans;
  * @author rcbb.cc
  * @date 2025/3/17
  */
-public class ArgumentValue {
+public class ConstructorArgumentValue {
 
     private String type;
     private String name;
     private Object value;
 
-    public ArgumentValue(String type, Object value) {
+    public ConstructorArgumentValue(String type, Object value) {
         this.type = type;
         this.value = value;
     }
 
-    public ArgumentValue(String type, String name, Object value) {
+    public ConstructorArgumentValue(String type, String name, Object value) {
         this.type = type;
         this.name = name;
         this.value = value;
