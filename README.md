@@ -91,7 +91,7 @@ Spring 对于循环依赖的支持，反而导致了程序员写出了坏味道�
 
 # 04｜增强IoC容器：如何让我们的Spring支持注解？
 
-## ioc-04 优化
+## ioc-05 优化
 
 - 项目代码结构。beans 目录下新增 factory 目录，factory 目录中新增 xml、support、config 和 annotation。
 - ArgumentValue、ArgumentValues 修改为 ConstructorArgumentValue、ConstructorArgumentValues。
@@ -108,3 +108,38 @@ AutowireCapableBeanFactory 再通过定义 BeanPostProcessor 接口类型的属�
 最后在 ClassPathXmlApplicationContext 中统一注册 BeanPostProcessor，再抽取成一个启动方法，非常优雅。
 
 ![增强IoC容器](https://rcbb-blog.oss-cn-guangzhou.aliyuncs.com/2025/03/20250320163939-63270a.png?x-oss-process=style/yuantu_shuiyin)
+
+# 05｜实现完整的IoC容器：构建工厂体系并添加容器事件
+
+## ioc-06 优化
+
+- ListableBeanFactory：接口，继承 BeanFactory，BeanDefinition 的一些操作。
+- ConfigurableBeanFactory：接口，继承 BeanFactory，BeanPostProcessor 的一些操作。
+- ConfigurableListableBeanFactory：接口，把AutowireCapableBeanFactory、ListableBeanFactory 和 ConfigurableBeanFactory 合并在一起。
+- 在 core 目录下新建 env 目录。
+- PropertyResolver：接口，用于获取属性值。
+- Environment：接口，继承 PropertyResolver，用于获取环境变量。
+- EnvironmentCapable：接口，主要用于获取 Environment 实例。
+- DefaultListableBeanFactory：继承 AbstractAutowireCapableBeanFactory，实现 ConfigurableListableBeanFactory 接口，成为了 IoC 引擎。
+- 完善事件的发布与监听：ApplicationEvent、ApplicationListener、ApplicationEventPublisher 以及 ContextRefreshEvent。
+
+DefaultListableBeanFactory 的继承体系图：
+![DefaultListableBeanFactory](https://rcbb-blog.oss-cn-guangzhou.aliyuncs.com/2025/03/0827FB38-09E5-4925-8560-6558FB5357CB-67d548.png?x-oss-process=style/yuantu_shuiyin)
+
+
+总结：     
+接口：     
+- BeanFactory：Bean 工厂。
+- SingletonBeanRegistry：单例 Bean 仓库。
+> DefaultSingletonBeanRegistry：默认的单例 Bean 仓库实现。提供了注册列表、单例容器、依赖注入管理信息(两个Map，依赖和被依赖)。
+- BeanDefinitionRegistry：强调对 BeanDefinition 进行操作。
+- ListableBeanFactory：对 BeanDefinition 的 List 进行操作。
+- ConfigurableBeanFactory：Bean 处理器(只有 add 和 get，没有 apply)，以及管理依赖信息。
+- AutowireCapableBeanFactory：提供自动装配选项，并在初始化前后应用(apply) Bean 处理器。
+- ConfigurableListableBeanFactory：集成接口。
+
+抽象类：
+- AbstractBeanFactory：主要是 refresh、invokeInitMethod、createBean、构造器注入和属性注入。
+- AbstractAutowireCapableBeanFactory：提供成员变量 List<BeanPostProcessor> 可通过该成员进行更多的 bean 出来操作，add、get、apply 具体实现。
+
+![实现完整的IoC容器](https://rcbb-blog.oss-cn-guangzhou.aliyuncs.com/2025/03/20250325113451-cbd90f.png?x-oss-process=style/yuantu_shuiyin)

@@ -1,9 +1,9 @@
 package cc.rcbb.mini.spring.context;
 
 import cc.rcbb.mini.spring.beans.BeansException;
-import cc.rcbb.mini.spring.beans.factory.BeanFactory;
 import cc.rcbb.mini.spring.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
-import cc.rcbb.mini.spring.beans.factory.config.AutowireCapableBeanFactory;
+import cc.rcbb.mini.spring.beans.factory.config.ConfigurableListableBeanFactory;
+import cc.rcbb.mini.spring.beans.factory.support.DefaultListableBeanFactory;
 import cc.rcbb.mini.spring.beans.factory.xml.XmlBeanDefinitionReader;
 import cc.rcbb.mini.spring.core.ClassPathXmlResource;
 import cc.rcbb.mini.spring.core.Resource;
@@ -16,9 +16,9 @@ import cc.rcbb.mini.spring.core.Resource;
  * @author rcbb.cc
  * @date 2025/3/13
  */
-public class ClassPathXmlApplicationContext implements BeanFactory {
+public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
 
-    private AutowireCapableBeanFactory beanFactory;
+    DefaultListableBeanFactory beanFactory;
 
     public ClassPathXmlApplicationContext(String fileName) {
         this(fileName, true);
@@ -26,10 +26,9 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
 
     public ClassPathXmlApplicationContext(String fileName, boolean isRefresh) {
         Resource resource = new ClassPathXmlResource(fileName);
-        AutowireCapableBeanFactory beanFactory = new AutowireCapableBeanFactory();
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
         reader.loadBeanDefinitions(resource);
-
         this.beanFactory = beanFactory;
         if (isRefresh) {
             try {
@@ -40,45 +39,50 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
         }
     }
 
-    public void refresh() throws BeansException, IllegalStateException {
-        this.registerBeanPostProcessors(this.beanFactory);
-        this.onRefresh();
+    @Override
+    public ConfigurableListableBeanFactory getBeanFactory() throws IllegalStateException {
+        return this.beanFactory;
     }
 
-    private void registerBeanPostProcessors(AutowireCapableBeanFactory beanFactory) {
-        //if (supportAutowire) {
-        beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
-        //}
+    @Override
+    void postProcessBeanFactory(ConfigurableListableBeanFactory bf) {
+
     }
 
-    private void onRefresh() {
+    @Override
+    void registerBeanPostProcessors(ConfigurableListableBeanFactory bf) {
+        this.beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
+    }
+
+    @Override
+    void initApplicationEventPublisher() {
+        ApplicationEventPublisher publisher = new SimpleApplicationEventPublisher();
+        this.setApplicationEventPublisher(publisher);
+    }
+
+    @Override
+    void onRefresh() {
         this.beanFactory.refresh();
     }
 
-
     @Override
-    public Object getBean(String beanName) throws BeansException {
-        return this.beanFactory.getBean(beanName);
+    void registerListeners() {
+        ApplicationListener listener = new ApplicationListener();
+        this.getApplicationEventPublisher().addApplicationListener(listener);
     }
 
     @Override
-    public boolean containsBean(String name) {
-        return this.containsBean(name);
+    void finishRefresh() {
+        this.publishEvent(new ContextRefreshEvent("Context Refreshed..."));
     }
 
     @Override
-    public boolean isSingleton(String name) {
-        return false;
+    public void publishEvent(ApplicationEvent event) {
+        this.getApplicationEventPublisher().publishEvent(event);
     }
 
     @Override
-    public boolean isPrototype(String name) {
-        return false;
+    public void addApplicationListener(ApplicationListener listener) {
+        this.getApplicationEventPublisher().addApplicationListener(listener);
     }
-
-    @Override
-    public Class<?> getType(String name) {
-        return null;
-    }
-
 }

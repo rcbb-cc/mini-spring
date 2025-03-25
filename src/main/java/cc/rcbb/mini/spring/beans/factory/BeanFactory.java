@@ -14,8 +14,6 @@ public interface BeanFactory {
 
     Object getBean(String name) throws BeansException;
 
-    //void registerBeanDefinition(BeanDefinition beanDefinition);
-
     boolean containsBean(String name);
 
     boolean isSingleton(String name);

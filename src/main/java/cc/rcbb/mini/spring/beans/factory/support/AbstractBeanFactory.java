@@ -4,7 +4,7 @@ import cc.rcbb.mini.spring.beans.BeanDefinition;
 import cc.rcbb.mini.spring.beans.BeansException;
 import cc.rcbb.mini.spring.beans.PropertyValue;
 import cc.rcbb.mini.spring.beans.PropertyValues;
-import cc.rcbb.mini.spring.beans.factory.BeanFactory;
+import cc.rcbb.mini.spring.beans.factory.config.ConfigurableBeanFactory;
 import cc.rcbb.mini.spring.beans.factory.config.ConstructorArgumentValue;
 import cc.rcbb.mini.spring.beans.factory.config.ConstructorArgumentValues;
 
@@ -25,10 +25,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author rcbb.cc
  * @date 2025/3/20
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory, BeanDefinitionRegistry {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory, BeanDefinitionRegistry {
 
-    private Map<String, BeanDefinition> beanDefinitions = new ConcurrentHashMap<>(256);
-    private List<String> beanDefinitionNames = new ArrayList<>();
+    protected Map<String, BeanDefinition> beanDefinitions = new ConcurrentHashMap<>(256);
+    protected List<String> beanDefinitionNames = new ArrayList<>();
     private final Map<String, Object> earlySingletonObjects = new HashMap<>(16);
 
     public AbstractBeanFactory() {

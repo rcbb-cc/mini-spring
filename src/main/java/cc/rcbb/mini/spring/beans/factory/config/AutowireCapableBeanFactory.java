@@ -1,11 +1,7 @@
 package cc.rcbb.mini.spring.beans.factory.config;
 
 import cc.rcbb.mini.spring.beans.BeansException;
-import cc.rcbb.mini.spring.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
-import cc.rcbb.mini.spring.beans.factory.support.AbstractBeanFactory;
-
-import java.util.ArrayList;
-import java.util.List;
+import cc.rcbb.mini.spring.beans.factory.BeanFactory;
 
 /**
  * <p>
@@ -15,46 +11,13 @@ import java.util.List;
  * @author rcbb.cc
  * @date 2025/3/20
  */
-public class AutowireCapableBeanFactory extends AbstractBeanFactory {
+public interface AutowireCapableBeanFactory extends BeanFactory {
 
-    private final List<AutowiredAnnotationBeanPostProcessor> beanPostProcessors = new ArrayList<>();
+    int AUTOWIRE_NO = 0;
+    int AUTOWIRE_BY_NAME = 1;
+    int AUTOWIRE_BY_TYPE = 2;
 
-    public void addBeanPostProcessor(AutowiredAnnotationBeanPostProcessor beanPostProcessor) {
-        this.beanPostProcessors.remove(beanPostProcessor);
-        this.beanPostProcessors.add(beanPostProcessor);
-    }
+    Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException;
 
-    public int getBeanPostProcessorCount() {
-        return this.beanPostProcessors.size();
-    }
-
-    public List<AutowiredAnnotationBeanPostProcessor> getBeanPostProcessors() {
-        return this.beanPostProcessors;
-    }
-
-    @Override
-    public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException {
-        Object result = existingBean;
-        for (AutowiredAnnotationBeanPostProcessor beanPostProcessor : this.beanPostProcessors) {
-            beanPostProcessor.setBeanFactory(this);
-            result = beanPostProcessor.postProcessBeforeInitialization(result, beanName);
-            if (result == null) {
-                return result;
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException {
-        Object result = existingBean;
-        for (BeanPostProcessor beanPostProcessor : this.beanPostProcessors) {
-            result = beanPostProcessor.postProcessAfterInitialization(result, beanName);
-            if (result == null) {
-                return result;
-            }
-        }
-        return result;
-    }
-
+    Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException;
 }
