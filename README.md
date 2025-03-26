@@ -143,3 +143,46 @@ DefaultListableBeanFactory 的继承体系图：
 - AbstractAutowireCapableBeanFactory：提供成员变量 List<BeanPostProcessor> 可通过该成员进行更多的 bean 出来操作，add、get、apply 具体实现。
 
 ![实现完整的IoC容器](https://rcbb-blog.oss-cn-guangzhou.aliyuncs.com/2025/03/20250325113451-cbd90f.png?x-oss-process=style/yuantu_shuiyin)
+
+# 07｜原始MVC：如何通过单一的Servlet拦截请求分派任务？
+
+## mvc-01
+
+- 新增一个与 src 目录同级的 WebContent 目录，用于存放静态资源和 xml 配置文件。
+- 新增一个与 core 包同级的 web 包。
+- minisMVC-servlet.xml：用于配置 url 对应处理的类和方法。
+- web.xml：用于配置 servlet，还有 minisMVC-servlet.xml 的路径配置。
+- DispatcherServlet：mvc 核心启动类，完成 url 映射机制。
+- @RequestMapping：注解，修饰方法时，表示该方法被映射到该 url。
+
+![原始MVC](https://rcbb-blog.oss-cn-guangzhou.aliyuncs.com/2025/03/20250326153522-21b93a.png?x-oss-process=style/yuantu_shuiyin)
+
+关于启动，解决方式如下：   
+1. IDEA 配置 Tomcat 运行项目。
+- [IntelliJ IDEA中配置Tomcat](https://blog.csdn.net/Wxy971122/article/details/123508532)
+- [IntelliJ IDEA部署web项目到Tomcat](https://blog.csdn.net/fannyoona/article/details/113933113)
+
+2. 可加入 embeded tomcat 依赖，然后使用下面代码运行。
+```
+<!-- 嵌入式 Tomcat -->
+<dependency>
+    <groupId>org.apache.tomcat</groupId>
+    <artifactId>tomcat-catalina</artifactId>
+    <version>9.0.73</version>
+</dependency>
+```
+```java
+public class App {
+    public static void main(String[] args) throws LifecycleException {
+        System.out.println("Hello World!");
+        Tomcat tomcat = new Tomcat();
+        String webappDirLocation = "WebContent";
+        StandardContext context = (StandardContext) tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
+        Connector connector = new Connector();
+        connector.setPort(8080);
+        tomcat.setConnector(connector);
+        tomcat.start();
+        tomcat.getServer().await();
+    }
+}
+```

@@ -20,5 +20,16 @@
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <!-- 嵌入式 Tomcat -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+            <version>9.0.73</version>
+        </dependency>
     </dependencies>
 </project>
