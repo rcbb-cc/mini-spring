@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="testUser" class="cc.rcbb.mini.spring.test.TestUser">
+        <property type="String" name="id" value="123"/>
+        <property type="String" name="name" value="abc"/>
+        <property type="String" name="age" value="3"/>
+    </bean>
+    <bean id="testUserDao" class="cc.rcbb.mini.spring.test.TestUserDao">
+        <property type="cc.rcbb.mini.spring.test.TestUser" name="testUser" ref="testUser"/>
+    </bean>
+    <bean id="testUserService" class="cc.rcbb.mini.spring.test.TestUserService"/>
+</beans>

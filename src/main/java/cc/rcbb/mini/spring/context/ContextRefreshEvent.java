@@ -8,7 +8,7 @@ package cc.rcbb.mini.spring.context;
  * @author rcbb.cc
  * @date 2025/3/24
  */
-public class ContextRefreshEvent extends ApplicationEvent{
+public class ContextRefreshEvent extends ApplicationEvent {
 
     private static final long serialVersionUID = 1L;
 

@@ -186,3 +186,18 @@ public class App {
     }
 }
 ```
+
+# 08｜整合IoC和MVC：如何在Web环境中启动IoC容器？
+
+## mvc-02
+
+- MVC 的实现需要符合 Web 规范。
+- web.xml 文件中定义的元素加载过程：先获取全局的参数 context-param 来创建上下文，之后如果配置文件里定义了 Listener，那服务器会先启动它们，之后是 Filter，最后是 Servlet。因此可以利用这个时序，把容器的启动放到 Web 应用的 Listener 中。
+- ContextLoaderListener：监听器，用于启动 IoC 容器。
+- WebApplicationContext：上下文接口，应用在 Web 项目中。
+- AnnotationConfigWebApplicationContext：简称 WAC，配置类 Web 上下文，用于加载配置类。
+
+总结：    
+- 当 Servlet 服务器启动时，Listener 会优先启动，读取配置文件路径，启动过程中初始化上下文，然后启动 IoC 容器，这个容器会通过 refresh() 方法加载所管理的 Bean 对象。这样就实现了 Tomcat 启动的时候同时启动 IoC 容器。
+- Servlet 规范中规定的时序，从 listener 到 filter 再到 servlet，每一个环节都预留了接口让我们有机会干预，写入我们需要的代码。
+

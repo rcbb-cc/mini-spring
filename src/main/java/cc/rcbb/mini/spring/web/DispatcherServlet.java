@@ -26,6 +26,7 @@ import java.util.Map;
  */
 public class DispatcherServlet extends HttpServlet {
 
+    private WebApplicationContext webApplicationContext;
     private String contextConfigLocation;
     private List<String> packageNames = new ArrayList<>();
     private List<String> controllerNames = new ArrayList<>();
@@ -43,17 +44,18 @@ public class DispatcherServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
+        this.webApplicationContext = (WebApplicationContext) this.getServletContext().getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
         this.contextConfigLocation = config.getInitParameter("contextConfigLocation");
         System.out.println("contextConfigLocation = " + this.contextConfigLocation);
-        URL url = null;
+        URL xmlPath = null;
         try {
-            url = this.getServletContext().getResource(this.contextConfigLocation);
+            xmlPath = this.getServletContext().getResource(this.contextConfigLocation);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
 
-        this.packageNames = XmlScanComponentHelper.getNodeValue(url);
-        System.out.println("url = " + url);
+        this.packageNames = XmlScanComponentHelper.getNodeValue(xmlPath);
+        System.out.println("xmlPath = " + xmlPath);
         System.out.println("packageNames = " + this.packageNames);
 
         this.refresh();
