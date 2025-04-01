@@ -37,7 +37,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     public void refresh() {
         for (String beanName : beanDefinitionNames) {
             try {
-                getBean(beanName);
+                this.getBean(beanName);
             } catch (BeansException e) {
                 e.printStackTrace();
             }
@@ -142,7 +142,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     private void handleProperties(BeanDefinition beanDefinition, Class<?> clz, Object object) {
         PropertyValues propertyValues = beanDefinition.getPropertyValues();
-        if (!propertyValues.isEmpty()) {
+        if (propertyValues != null && !propertyValues.isEmpty()) {
             for (int i = 0; i < propertyValues.size(); i++) {
                 PropertyValue propertyValue = propertyValues.getPropertyValueList().get(i);
                 Class<?>[] paramTypes = new Class<?>[1];
@@ -204,7 +204,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
             clz = Class.forName(beanDefinition.getClassName());
 
             ConstructorArgumentValues argumentValues = beanDefinition.getConstructorArgumentValues();
-            if (!argumentValues.isEmpty()) {
+            if (argumentValues != null && !argumentValues.isEmpty()) {
                 Class<?>[] paramTypes = new Class<?>[argumentValues.getArgumentCount()];
                 Object[] paramValues = new Object[argumentValues.getArgumentCount()];
                 for (int i = 0; i < argumentValues.getArgumentCount(); i++) {

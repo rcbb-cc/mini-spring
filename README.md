@@ -201,3 +201,47 @@ public class App {
 - 当 Servlet 服务器启动时，Listener 会优先启动，读取配置文件路径，启动过程中初始化上下文，然后启动 IoC 容器，这个容器会通过 refresh() 方法加载所管理的 Bean 对象。这样就实现了 Tomcat 启动的时候同时启动 IoC 容器。
 - Servlet 规范中规定的时序，从 listener 到 filter 再到 servlet，每一个环节都预留了接口让我们有机会干预，写入我们需要的代码。
 
+# 09｜分解Dispatcher：如何把专门的事情交给专门的部件去做？
+
+## mvc-03
+
+- 在 web 包下增加 servlet 包。
+- 按照 Web 分层体系，结构上会有 Controller、Service两层。Controller 由 DispatcherServlet 负责启动，Service 由 Listener 负责启动。
+- AnnotationConfigWebApplicationContext：配置类 Web 上下文，用于加载配置类。
+- XmlWebApplicationContext：XML 配置 Web 上下文，用于加载 XML 配置文件。
+- HandlerMethod：处理器方法，用于封装处理器方法。
+- HandlerMapping：接口，映射器，用于根据 url 找到对应的处理器。
+- HandlerAdapter：接口，适配器，用于根据处理器的类型，调用对应的处理器方法。
+- MappingRegistry：映射注册表，用于记录处理器和 url 的映射关系。
+- RequestMappingHandlerMapping：实现 HandlerMapping 接口，映射器，用于根据 url 找到对应的处理器，并记录映射关系。
+- RequestMappingHandlerAdapter：实现 HandlerAdapter 接口，适配器，用于根据处理器的类型，调用对应的处理器方法。
+
+总结：    
+- Listener 初始化的时候将交给 Ioc 管理 Bean 初始化。
+- Servlet 初始化的时候将 controller 相关的 Bean 初始化。
+> 为什么 Spring 要搞出两个容器来呢？  
+> 这样分开更清晰，Dispatcher 驱动的子容器专门用来处理 controller 组件，ContextLoaderListener 驱动的父容器专门用来处理业务逻辑组件以及持久化组件。  
+> Spring 体系中 IoC 是核心层，MVC 只是外周的部分，理论上是可以不启用的可选部件。  
+
+
+遗留的疑问：    
+1. DispatcherServlet 中的 controller 相关 bean 的初始化已经交给 AnnotationConfigWebApplicationContext 管理了，它的 init 方法不用在调用 initController 了。
+2. 如果在 HelloWorldBean 中以 @Autowired 注解注入 TestUserService，是无法注入成功的？那么 Spring 是怎么做的呢，自己当前的 factory 找不到，去父类的 factory 找？
+
+# 问题记录
+
+## 为啥不直接给成员变量赋值呢？
+
+```java
+DefaultListableBeanFactory beanFactory;
+DefaultListableBeanFactory bf = new DefaultListableBeanFactory();        
+this.beanFactory = bf;
+```
+为啥不直接给成员变量赋值呢？
+> this.beanFactory = new DefaultListableBeanFactory();
+
+习惯问题吧，Spring框架本身也是经常这样写。   
+有一个潜在原因，但是我不是很确定，就是方法中尽量使用 local 变量，只在尽量少的场合使用实例变量和方法参数，这样提高性能减少开销。  
+编译器优化是这么说的，但是我也不确定一定就是这样。  
+另外，对源码，我还是建议最后去读 Spring 框架的源代码，那是世界顶级程序员的力作（推广到别的也是一样的，Apache Tomcat，JDK，Apache Dubbo）。
+我自己也是在跟着他们的时候一旁偷学了几招，MiniSpring 的目的是剖析 Spring 框架内部结构，作为一个简明地图引导大家理解 Spring。

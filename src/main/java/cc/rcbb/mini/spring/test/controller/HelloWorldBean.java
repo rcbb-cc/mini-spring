@@ -1,4 +1,4 @@
-package cc.rcbb.mini.spring.test;
+package cc.rcbb.mini.spring.test.controller;
 
 import cc.rcbb.mini.spring.web.RequestMapping;
 
@@ -12,6 +12,9 @@ import cc.rcbb.mini.spring.web.RequestMapping;
  */
 public class HelloWorldBean {
 
+    /*@Autowired
+    private TestUserService testUserService;*/
+
     @RequestMapping("/test1")
     public String doTest1() {
         return "test 1, hello world!";
@@ -21,5 +24,10 @@ public class HelloWorldBean {
     public String doTest2() {
         return "test 2, hello world!";
     }
+
+    /*@RequestMapping("/testUser")
+    public String testUser() {
+        return testUserService.getTestUser().toString();
+    }*/
 
 }
