@@ -13,6 +13,11 @@ public class PropertyValue {
     private String name;
     private Object value;
     private boolean isRef;
+
+    public PropertyValue(String name, Object value) {
+        this("", name, value, false);
+    }
+
     public PropertyValue(String type, String name, Object value, boolean isRef) {
         this.type = type;
         this.name = name;

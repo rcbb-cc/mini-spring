@@ -101,11 +101,9 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) {
         req.setAttribute(WEB_APPLICATION_CONTEXT_ATTRIBUTE, this.webApplicationContext);
-
         try {
             this.doDispatch(req, resp);
         } catch (Exception e) {

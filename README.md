@@ -228,6 +228,44 @@ public class App {
 1. DispatcherServlet 中的 controller 相关 bean 的初始化已经交给 AnnotationConfigWebApplicationContext 管理了，它的 init 方法不用在调用 initController 了。
 2. 如果在 HelloWorldBean 中以 @Autowired 注解注入 TestUserService，是无法注入成功的？那么 Spring 是怎么做的呢，自己当前的 factory 找不到，去父类的 factory 找？
 
+# 10｜数据绑定: 如何自动转换传入的参数？
+
+## mvc-04
+
+- WebDataBinder：数据绑定器，用于自动转换传入的参数。
+- PropertyEditor：接口，属性编辑器，用于转换属性。
+- CustomNumberEditor：属性编辑器，用于转换数字类型。
+- StringEditor：属性编辑器，用于转换字符串类型。
+- PropertyEditorRegistrySupport：属性编辑器注册器，用于注册属性编辑器。
+- BeanWrapperImpl：继承 PropertyEditorRegistrySupport，利用反射对 Bean 属性值进行读写。
+- WebDataBinderFactory：接口，数据绑定工厂，用于创建数据绑定器。
+- WebDataBinder：数据绑定器，用于自动转换传入的参数。
+- CustomDateEditor：实现了 PropertyEditor 接口，自定义的日期格式处理器，来进行测试。
+- WebBindingInitializer：接口，数据绑定初始化器，用于初始化数据绑定器。
+- DateInitializer：实现了 WebBindingInitializer 接口，用于初始化 CustomDateEditor 处理器。
+
+总结：    
+目前的实现无法完成对基本类型的转换，处理的是复合类型的转换。     
+举例：定义了 TestReq，里面有 key、value 属性值，在 /test2?key=1&value=2 请求中将参数值封装到 TestReq 中。
+
+1. RequestMappingHandlerAdapter 中对参数进行处理，对于每个参数都有一个 WebDataBinder 进行处理。  
+2. WebDataBinder 进行类型绑定的时候，主要是通过 BeanWrapperImpl 类来进行处理。  
+3. 此时，每个 WebDataBinder 和 BeanWrapperImpl 内的 clazz 指向的都是这个参数的类。
+4. 在 BeanWrapperImpl 的 setPropertyValue 方法中，主要是借助于由请求转换而来的 PropertyValue 类。  
+5. PropertyValue 中主要由 name 和 value，对应的是请求中的请求名和参数，并调用 BeanPropertyHandler 以 PropertyValue 的 name 进行处理。   
+6. BeanPropertyHandler 首先根据请求名找到这个请求参数的类里面对应名称的 Field，在根据 Field 获取对应的 Clazz。  
+7. 然后使用 Editor 的 getValue 来进行类型转换，使用 set 方法进行赋值，然后使用对应属性的 get 方法进行取值操作。  
+
+
+
+
+
+
+
+
+
+
+
 # 问题记录
 
 ## 为啥不直接给成员变量赋值呢？

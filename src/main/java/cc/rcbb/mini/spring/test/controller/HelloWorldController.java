@@ -1,16 +1,17 @@
 package cc.rcbb.mini.spring.test.controller;
 
+import cc.rcbb.mini.spring.test.req.TestReq;
 import cc.rcbb.mini.spring.web.RequestMapping;
 
 /**
  * <p>
- * HelloWorldBean
+ * HelloWorldController
  * </p>
  *
  * @author rcbb.cc
  * @date 2025/3/26
  */
-public class HelloWorldBean {
+public class HelloWorldController {
 
     /*@Autowired
     private TestUserService testUserService;*/
@@ -21,8 +22,8 @@ public class HelloWorldBean {
     }
 
     @RequestMapping("/test2")
-    public String doTest2() {
-        return "test 2, hello world!";
+    public String doTest2(TestReq req) {
+        return "test 2, hello world! " + req.toString();
     }
 
     /*@RequestMapping("/testUser")

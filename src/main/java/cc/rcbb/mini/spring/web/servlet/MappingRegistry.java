@@ -19,6 +19,8 @@ public class MappingRegistry {
     private List<String> urlMappingNames = new ArrayList<>();
     private Map<String, Object> mappingObjs = new HashMap<>();
     private Map<String, Method> mappingMethods = new HashMap<>();
+    private Map<String, String> mappingMethodNames = new HashMap<>();
+    private Map<String, Class<?>> mappingClasses = new HashMap<>();
 
     public List<String> getUrlMappingNames() {
         return urlMappingNames;
@@ -42,6 +44,22 @@ public class MappingRegistry {
 
     public void setMappingMethods(Map<String, Method> mappingMethods) {
         this.mappingMethods = mappingMethods;
+    }
+
+    public Map<String, Class<?>> getMappingClasses() {
+        return mappingClasses;
+    }
+
+    public void setMappingClasses(Map<String, Class<?>> mappingClasses) {
+        this.mappingClasses = mappingClasses;
+    }
+
+    public Map<String, String> getMappingMethodNames() {
+        return mappingMethodNames;
+    }
+
+    public void setMappingMethodNames(Map<String, String> mappingMethodNames) {
+        this.mappingMethodNames = mappingMethodNames;
     }
 
 }

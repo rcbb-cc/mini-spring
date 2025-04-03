@@ -28,10 +28,11 @@ public class HandlerMethod {
 
     private String methodName;
 
-    public HandlerMethod(Method method, Object obj) {
-        this.setMethod(method);
-        this.setBean(obj);
-
+    public HandlerMethod(Method method, Object obj, Class<?> clz, String methodName) {
+        this.method = method;
+        this.bean = obj;
+        this.beanType = clz;
+        this.methodName = methodName;
     }
 
     public Method getMethod() {
