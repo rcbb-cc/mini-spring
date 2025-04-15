@@ -6,7 +6,7 @@
     </context-param>
     <listener>
         <listener-class>
-            cc.rcbb.mini.spring.web.ContextLoaderListener
+            cc.rcbb.mini.spring.web.context.ContextLoaderListener
         </listener-class>
     </listener>
     <servlet>

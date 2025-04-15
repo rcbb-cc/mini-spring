@@ -1,8 +1,10 @@
-package cc.rcbb.mini.spring.web.servlet;
+package cc.rcbb.mini.spring.web.method.annotation;
 
 import cc.rcbb.mini.spring.beans.BeansException;
-import cc.rcbb.mini.spring.web.RequestMapping;
-import cc.rcbb.mini.spring.web.WebApplicationContext;
+import cc.rcbb.mini.spring.web.bind.annotation.RequestMapping;
+import cc.rcbb.mini.spring.web.context.WebApplicationContext;
+import cc.rcbb.mini.spring.web.method.HandlerMethod;
+import cc.rcbb.mini.spring.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;

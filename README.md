@@ -256,10 +256,31 @@ public class App {
 6. BeanPropertyHandler 首先根据请求名找到这个请求参数的类里面对应名称的 Field，在根据 Field 获取对应的 Clazz。  
 7. 然后使用 Editor 的 getValue 来进行类型转换，使用 set 方法进行赋值，然后使用对应属性的 get 方法进行取值操作。  
 
+# 11｜ModelAndView ：如何将处理结果返回给前端？
 
+## mvc-05
 
+- 增加 http 包。web 包下新增 bind、context、method 包。
+- @ResponseBody：响应体注解，用于将处理结果按照某种字符串格式返回给前端。
+- HttpMessageConverter：接口，消息转换器，用于将返回给前端的字符流数据可以进行格式转换。
+- DefaultHttpMessageConverter：实现了 HttpMessageConverter 接口，默认消息转换器，把 Object 转成 JSON 串。
+- ObjectMapper：接口，对象映射器，用于将 Java 对象转成字符串。
+- DefaultObjectMapper：实现了 ObjectMapper 接口，默认对象映射器，用于将 Java 对象映射成 JSON 串。
+- ModelAndView：模型视图，用于封装处理结果，返回给前端。
+- View：接口，视图，把数据按照一定格式显示并输出到前端界面上。
+- ViewResolver：接口，视图解析器，用于根据视图名称找到对应的视图。
+- InternalResourceViewResolver：实现 ViewResolver 接口，视图解析器，作为启动 JSP 的默认实现。
+- JstlView：实现 View 接口，视图，用于将数据按照一定格式显示并输出到前端界面上。
 
+总结：   
+虽然已经不流行 JSP，但是部件的解耦的框架思想，值得学习。    
+1. 如何自动转换数据？MessageConverter
+2. 如何找到指定的 View？ViewResolver
+3. 如何去渲染页面？View
 
+遗留的疑问：   
+1. handlerAdapter 配置在 applicationContext.xml 中，在 DispatchServlet 中使用 `this.webApplicationContext` 应该是获取不到 handlerAdapter 的。
+> applicationContext.xml 中配置的 bean 不是应该在 ContextLoaderListener 中扫描加载，是 DispatchServlet 的 parentApplicationContext 吗？
 
 
 

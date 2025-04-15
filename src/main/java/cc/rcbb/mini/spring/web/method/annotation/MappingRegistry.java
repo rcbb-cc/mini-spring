@@ -1,4 +1,4 @@
-package cc.rcbb.mini.spring.web.servlet;
+package cc.rcbb.mini.spring.web.method.annotation;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

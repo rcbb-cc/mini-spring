@@ -1,4 +1,6 @@
-package cc.rcbb.mini.spring.web.servlet;
+package cc.rcbb.mini.spring.web.method;
+
+import cc.rcbb.mini.spring.web.servlet.MethodParameter;
 
 import java.lang.reflect.Method;
 

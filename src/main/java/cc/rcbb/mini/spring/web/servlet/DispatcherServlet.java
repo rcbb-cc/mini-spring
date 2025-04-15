@@ -1,9 +1,13 @@
 package cc.rcbb.mini.spring.web.servlet;
 
 import cc.rcbb.mini.spring.beans.BeansException;
-import cc.rcbb.mini.spring.web.AnnotationConfigWebApplicationContext;
-import cc.rcbb.mini.spring.web.WebApplicationContext;
-import cc.rcbb.mini.spring.web.XmlScanComponentHelper;
+import cc.rcbb.mini.spring.web.context.WebApplicationContext;
+import cc.rcbb.mini.spring.web.context.support.AnnotationConfigWebApplicationContext;
+import cc.rcbb.mini.spring.web.context.support.XmlScanComponentHelper;
+import cc.rcbb.mini.spring.web.method.HandlerMethod;
+import cc.rcbb.mini.spring.web.method.annotation.RequestMappingHandlerMapping;
+import cc.rcbb.mini.spring.web.servlet.view.InternalResourceViewResolver;
+import cc.rcbb.mini.spring.web.servlet.view.JstlView;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -25,6 +29,7 @@ import java.util.*;
 public class DispatcherServlet extends HttpServlet {
 
     public static final String WEB_APPLICATION_CONTEXT_ATTRIBUTE = DispatcherServlet.class.getName() + ".CONTEXT";
+    public static final String HANDLER_ADAPTER_BEAN_NAME = "handlerAdapter";
     private WebApplicationContext webApplicationContext;
     private WebApplicationContext parentApplicationContext;
     private String contextConfigLocation;
@@ -35,6 +40,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private HandlerMapping handlerMapping;
     private HandlerAdapter handlerAdapter;
+    private ViewResolver viewResolver;
 
     public DispatcherServlet() {
         super();
@@ -68,16 +74,21 @@ public class DispatcherServlet extends HttpServlet {
         this.initController();
 
         this.initHandlerMappings(this.webApplicationContext);
-        this.initHandlerAdapters(this.webApplicationContext);
+        //TODO：这里存在疑问，如果使用 this.webApplicationContext 会存在问题
+        this.initHandlerAdapters(this.parentApplicationContext);
         this.initViewResolvers(this.webApplicationContext);
     }
 
     private void initViewResolvers(WebApplicationContext webApplicationContext) {
-
+        this.viewResolver = new InternalResourceViewResolver(JstlView.class, "/jsp/", ".jsp");
     }
 
     private void initHandlerAdapters(WebApplicationContext webApplicationContext) {
-        this.handlerAdapter = new RequestMappingHandlerAdapter(webApplicationContext);
+        try {
+            this.handlerAdapter = (HandlerAdapter) webApplicationContext.getBean(HANDLER_ADAPTER_BEAN_NAME);
+        } catch (BeansException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initHandlerMappings(WebApplicationContext webApplicationContext) {
@@ -120,7 +131,31 @@ public class DispatcherServlet extends HttpServlet {
             return;
         }
         HandlerAdapter ha = this.handlerAdapter;
-        ha.handle(processedRequest, res, handlerMethod);
+        ModelAndView modelAndView = ha.handle(processedRequest, res, handlerMethod);
+
+        render(processedRequest, res, modelAndView);
+    }
+
+    protected void render(HttpServletRequest request, HttpServletResponse response, ModelAndView modelAndView) throws Exception {
+        if (modelAndView == null) {
+            response.getWriter().flush();
+            response.getWriter().close();
+            return;
+        }
+        String viewName = modelAndView.getViewName();
+        Map<String, Object> model = modelAndView.getModel();
+        View view = resolveViewName(viewName, model, request);
+        view.render(model, request, response);
+    }
+
+    protected View resolveViewName(String viewName, Map<String, Object> model, HttpServletRequest request) throws Exception {
+        if (this.viewResolver != null) {
+            View view = viewResolver.resolveViewName(viewName);
+            if (view != null) {
+                return view;
+            }
+        }
+        return null;
     }
 
 }

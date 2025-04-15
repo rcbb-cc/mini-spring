@@ -1,4 +1,6 @@
-package cc.rcbb.mini.spring.web;
+package cc.rcbb.mini.spring.web.context;
+
+import cc.rcbb.mini.spring.web.context.support.XmlWebApplicationContext;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;

@@ -1,4 +1,4 @@
-package cc.rcbb.mini.spring.web;
+package cc.rcbb.mini.spring.web.context.support;
 
 import cc.rcbb.mini.spring.beans.BeanDefinition;
 import cc.rcbb.mini.spring.beans.BeansException;
@@ -7,6 +7,7 @@ import cc.rcbb.mini.spring.beans.factory.config.BeanFactoryPostProcessor;
 import cc.rcbb.mini.spring.beans.factory.config.ConfigurableListableBeanFactory;
 import cc.rcbb.mini.spring.beans.factory.support.DefaultListableBeanFactory;
 import cc.rcbb.mini.spring.context.*;
+import cc.rcbb.mini.spring.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
 import java.io.File;

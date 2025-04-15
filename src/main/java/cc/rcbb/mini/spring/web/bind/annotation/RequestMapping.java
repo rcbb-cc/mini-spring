@@ -1,4 +1,4 @@
-package cc.rcbb.mini.spring.web;
+package cc.rcbb.mini.spring.web.bind.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

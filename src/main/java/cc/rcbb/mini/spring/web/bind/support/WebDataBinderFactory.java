@@ -1,4 +1,6 @@
-package cc.rcbb.mini.spring.web;
+package cc.rcbb.mini.spring.web.bind.support;
+
+import cc.rcbb.mini.spring.web.bind.WebDataBinder;
 
 import javax.servlet.http.HttpServletRequest;
 

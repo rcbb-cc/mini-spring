@@ -1,5 +1,7 @@
 package cc.rcbb.mini.spring.web.servlet;
 
+import cc.rcbb.mini.spring.web.method.HandlerMethod;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**

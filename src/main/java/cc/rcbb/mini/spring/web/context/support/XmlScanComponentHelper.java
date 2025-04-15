@@ -1,4 +1,4 @@
-package cc.rcbb.mini.spring.web;
+package cc.rcbb.mini.spring.web.context.support;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

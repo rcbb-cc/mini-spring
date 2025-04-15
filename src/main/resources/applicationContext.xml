@@ -9,4 +9,16 @@
         <property type="cc.rcbb.mini.spring.test.TestUser" name="testUser" ref="testUser"/>
     </bean>
     <bean id="testUserService" class="cc.rcbb.mini.spring.test.TestUserService"/>
+
+    <bean id="handlerAdapter" class="cc.rcbb.mini.spring.web.method.annotation.RequestMappingHandlerAdapter">
+        <property type="cc.rcbb.mini.spring.http.converter.HttpMessageConverter" name="messageConverter" ref="messageConverter"/>
+    </bean>
+    <bean id="messageConverter" class="cc.rcbb.mini.spring.http.converter.DefaultHttpMessageConverter">
+        <property type="cc.rcbb.mini.spring.util.ObjectMapper" name="objectMapper" ref="objectMapper"/>
+    </bean>
+    <bean id="objectMapper" class="cc.rcbb.mini.spring.util.DefaultObjectMapper">
+        <property type="String" name="dateFormat" value="yyyy/MM/dd"/>
+        <property type="String" name="decimalFormat" value="###.##"/>
+    </bean>
+
 </beans>

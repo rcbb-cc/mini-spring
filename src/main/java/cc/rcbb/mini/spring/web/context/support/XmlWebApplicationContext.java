@@ -1,6 +1,7 @@
-package cc.rcbb.mini.spring.web;
+package cc.rcbb.mini.spring.web.context.support;
 
 import cc.rcbb.mini.spring.context.ClassPathXmlApplicationContext;
+import cc.rcbb.mini.spring.web.context.WebApplicationContext;
 
 import javax.servlet.ServletContext;
 
