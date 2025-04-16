@@ -1,5 +1,7 @@
 package cc.rcbb.mini.spring.test;
 
+import java.time.LocalDate;
+
 /**
  * <p>
  * TestUser
@@ -12,7 +14,8 @@ public class TestUser {
 
     private String id;
     private String name;
-    private String age;
+    private Integer age;
+    private LocalDate birthday;
 
     public String getId() {
         return id;
@@ -30,12 +33,20 @@ public class TestUser {
         this.name = name;
     }
 
-    public String getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 
     @Override
@@ -44,6 +55,7 @@ public class TestUser {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", age=" + age +
+                ", birthday=" + birthday +
                 '}';
     }
 }

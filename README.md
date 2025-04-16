@@ -282,7 +282,16 @@ public class App {
 1. handlerAdapter 配置在 applicationContext.xml 中，在 DispatchServlet 中使用 `this.webApplicationContext` 应该是获取不到 handlerAdapter 的。
 > applicationContext.xml 中配置的 bean 不是应该在 ContextLoaderListener 中扫描加载，是 DispatchServlet 的 parentApplicationContext 吗？
 
+# 13｜JDBC访问框架：如何抽取JDBC模板并隔离数据库？
 
+## jdbc-01
+
+- 加载驱动，获取数据库连接，创建 Statement，执行 SQL 语句，获取结果集，关闭资源。
+- 抽取 JdbcTemplate。动静分离，将固定的套路作为模板定下来，变化的部分让子类重写。
+- JdbcTemplate：模板类，用于执行 JDBC 操作，对 JDBC 操作进行封装，简化 JDBC 操作。
+- StatementCallback：接口，Statement 回调，用于执行 Statement 的回调方法。
+- PreparedStatementCallback：接口，PreparedStatement 回调，用于执行 PreparedStatement 的回调方法。
+- SingleConnectionDataSource：实现 DataSource 接口，单连接数据源，用于获取单连接的数据源。
 
 
 

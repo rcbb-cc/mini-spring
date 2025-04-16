@@ -15,8 +15,8 @@ public class TestUserService {
     @Autowired
     private TestUserDao testUserDao;
 
-    public TestUser getTestUser() {
-        return testUserDao.getTestUser();
+    public TestUser getTestUser(Integer id) {
+        return testUserDao.get(id);
     }
 
     public void setTestUserDao(TestUserDao testUserDao) {

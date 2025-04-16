@@ -36,7 +36,7 @@ public class HelloWorldController {
     public TestUser doTest3() {
         TestUser testUser = new TestUser();
         testUser.setId("1");
-        testUser.setAge("18");
+        testUser.setAge(18);
         testUser.setName("zhang san");
         return testUser;
     }

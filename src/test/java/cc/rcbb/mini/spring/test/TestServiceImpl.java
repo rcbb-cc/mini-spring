@@ -22,7 +22,6 @@ public class TestServiceImpl implements TestService {
     public TestServiceImpl(String name, int level) {
         this.name = name;
         this.level = level;
-        System.out.println(this.name + "," + this.level);
     }
 
     public String getName() {
