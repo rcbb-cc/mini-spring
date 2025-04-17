@@ -4,6 +4,7 @@ import cc.rcbb.mini.spring.beans.factory.annotation.Autowired;
 import cc.rcbb.mini.spring.jdbc.core.JdbcTemplate;
 
 import java.sql.ResultSet;
+import java.util.List;
 
 /**
  * <p>
@@ -32,6 +33,30 @@ public class TestUserDao {
             }
             return user;
         }));
+    }
+
+    public List<TestUser> list() {
+        final String sql = "select id, name, age, birthday from tb_user";
+        return jdbcTemplate.query(sql, null, (resultSet, rowNum) -> {
+            TestUser user = new TestUser();
+            user.setId(resultSet.getString("id"));
+            user.setName(resultSet.getString("name"));
+            user.setAge(resultSet.getInt("age"));
+            user.setBirthday(resultSet.getDate("birthday").toLocalDate());
+            return user;
+        });
+    }
+
+    public List<TestUser> list(Integer age) {
+        final String sql = "select id, name, age, birthday from tb_user where age > ?";
+        return jdbcTemplate.query(sql, new Object[]{age}, (resultSet, rowNum) -> {
+            TestUser user = new TestUser();
+            user.setId(resultSet.getString("id"));
+            user.setName(resultSet.getString("name"));
+            user.setAge(resultSet.getInt("age"));
+            user.setBirthday(resultSet.getDate("birthday").toLocalDate());
+            return user;
+        });
     }
 
 }

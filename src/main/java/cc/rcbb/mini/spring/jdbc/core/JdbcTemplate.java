@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 
 /**
  * <p>
@@ -48,16 +49,8 @@ public class JdbcTemplate {
             connection = dataSource.getConnection();
             preparedStatement = connection.prepareStatement(sql);
             if (args != null) {
-                for (int i = 0; i < args.length; i++) {
-                    Object arg = args[i];
-                    if (arg instanceof String) {
-                        preparedStatement.setString(i + 1, (String) arg);
-                    } else if (arg instanceof Integer) {
-                        preparedStatement.setInt(i + 1, (int) arg);
-                    } else if (arg instanceof java.util.Date) {
-                        preparedStatement.setDate(i + 1, new java.sql.Date(((java.util.Date) arg).getTime()));
-                    }
-                }
+                ArgumentPreparedStatementSetter argumentPreparedStatementSetter = new ArgumentPreparedStatementSetter(args);
+                argumentPreparedStatementSetter.setValues(preparedStatement);
                 return preparedStatementCallback.doInPreparedStatement(preparedStatement);
             }
         } catch (Exception e) {
@@ -72,6 +65,31 @@ public class JdbcTemplate {
         }
         return null;
     }
+
+    public <T> List<T> query(String sql, Object[] args, RowMapper<T> rowMapper) {
+        RowMapperResultSetExtractor<T> rowMapperResultSetExtractor = new RowMapperResultSetExtractor(rowMapper);
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = dataSource.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
+            if (args != null) {
+                ArgumentPreparedStatementSetter argumentPreparedStatementSetter = new ArgumentPreparedStatementSetter(args);
+                argumentPreparedStatementSetter.setValues(preparedStatement);
+            }
+            return rowMapperResultSetExtractor.extractData(preparedStatement.executeQuery());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                preparedStatement.close();
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public DataSource getDataSource() {
         return dataSource;

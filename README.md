@@ -293,8 +293,20 @@ public class App {
 - PreparedStatementCallback：接口，PreparedStatement 回调，用于执行 PreparedStatement 的回调方法。
 - SingleConnectionDataSource：实现 DataSource 接口，单连接数据源，用于获取单连接的数据源。
 
+# 14｜增强模板：如何抽取专门的部件完成专门的任务？
 
+## jdbc-02
 
+> SQL 语句参数的传入还是一个个写进去的，没有抽取出一个独立的部件进行统一处理。
+> 返回的记录是单行的，不支持多行的数据集。
+> 每次执行 SQL 语句都会建立连接、关闭连接，性能会受到很大影响。
+
+- ArgumentPreparedStatementSetter：用于将参数传入 PreparedStatement 中。
+- RowMapper：接口，行映射器，用于将结果集的每一行映射成一个对象。
+- ResultSetExtractor：接口，结果集提取器，用于将结果集提取成一个集合对象。
+- RowMapperResultSetExtractor：实现 ResultSetExtractor 接口，结果集提取器，用于将结果集提取成一个对象。
+- PooledConnection：实现 Connection 接口，池化连接，用于获取连接池中的连接。
+- PooledDataSource：实现 DataSource 接口，池化数据源，用于获取连接池中的连接。 
 
 # 问题记录
 
