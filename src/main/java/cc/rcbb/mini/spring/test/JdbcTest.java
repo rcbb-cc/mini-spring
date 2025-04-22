@@ -30,6 +30,9 @@ public class JdbcTest {
         for (TestUser user : list) {
             System.out.println(user);
         }
+        System.out.println();
+        TestUser testUser1 = testUserDao.get1(2);
+        System.out.println(testUser1);
     }
 
 }

@@ -308,6 +308,17 @@ public class App {
 - PooledConnection：实现 Connection 接口，池化连接，用于获取连接池中的连接。
 - PooledDataSource：实现 DataSource 接口，池化数据源，用于获取连接池中的连接。 
 
+# 15｜mBatis：如何将SQL语句配置化？
+
+## jdbc-03
+
+- SqlSessionFactory：接口，SQL 会话工厂，用于创建 SQL 会话。
+- DefaultSqlSessionFactory：实现 SQL 会话工厂接口，默认 SQL 会话工厂，用于创建默认 SQL 会话。
+- SqlSession：接口，SQL 会话，用于执行 SQL 语句。
+- DefaultSqlSession：实现 SQL 会话接口，默认 SQL 会话，用于执行 SQL 语句。
+- MapperNode：节点，用于封装 SQL 语句。
+
+
 # 问题记录
 
 ## 为啥不直接给成员变量赋值呢？

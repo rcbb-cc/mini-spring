@@ -14,17 +14,4 @@
         <!--<property type="cc.rcbb.mini.spring.test.BaseBaseService" name="baseBaseService" ref="basebaseservice"/>-->
     </bean>
 
-
-    <bean id="dataSource" class="cc.rcbb.mini.spring.jdbc.datasource.SingleConnectionDataSource">
-        <property type="String" name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-        <property type="String" name="url" value="jdbc:mysql://127.0.0.1:3306/test_db"/>
-        <property type="String" name="username" value="root"/>
-        <property type="String" name="password" value="123456"/>
-    </bean>
-    <bean id="jdbcTemplate" class="cc.rcbb.mini.spring.jdbc.core.JdbcTemplate">
-        <property type="javax.sql.DataSource" name="dataSource" ref="dataSource"/>
-    </bean>
-    <bean id="testUserDao" class="cc.rcbb.mini.spring.test.TestUserDao"/>
-    <bean id="testUserService" class="cc.rcbb.mini.spring.test.TestUserService"/>
-
 </beans>

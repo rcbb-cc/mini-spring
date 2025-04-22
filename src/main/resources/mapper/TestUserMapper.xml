@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="cc.rcbb.mini.spring.test.TestUserDao">
+    <select id="get1" parameterType="java.lang.Integer" resultType="cc.rcbb.mini.spring.test.TestUser">
+        select id, name, age, birthday from tb_user where id = ?
+    </select>
+</mapper>
