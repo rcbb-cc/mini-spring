@@ -227,6 +227,7 @@ public class App {
 遗留的疑问：    
 1. DispatcherServlet 中的 controller 相关 bean 的初始化已经交给 AnnotationConfigWebApplicationContext 管理了，它的 init 方法不用在调用 initController 了。
 2. 如果在 HelloWorldBean 中以 @Autowired 注解注入 TestUserService，是无法注入成功的？那么 Spring 是怎么做的呢，自己当前的 factory 找不到，去父类的 factory 找？
+> 已解决，在 DefaultListableBeanFactory 中实现了 getBean 方法，super.getBean(beanName) 获取不到，则到 parentBeanFactory 中获取。
 
 # 10｜数据绑定: 如何自动转换传入的参数？
 

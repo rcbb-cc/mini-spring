@@ -1,5 +1,7 @@
 package cc.rcbb.mini.spring.test.controller;
 
+import cc.rcbb.mini.spring.beans.factory.annotation.Autowired;
+import cc.rcbb.mini.spring.test.TestUserService;
 import cc.rcbb.mini.spring.test.req.TestReq;
 import cc.rcbb.mini.spring.web.RequestMapping;
 
@@ -13,8 +15,12 @@ import cc.rcbb.mini.spring.web.RequestMapping;
  */
 public class HelloWorldController {
 
-    /*@Autowired
-    private TestUserService testUserService;*/
+    @Autowired
+    private TestUserService testUserService;
+
+    public void setTestUserService(TestUserService testUserService) {
+        this.testUserService = testUserService;
+    }
 
     @RequestMapping("/test1")
     public String doTest1() {
@@ -26,9 +32,9 @@ public class HelloWorldController {
         return "test 2, hello world! " + req.toString();
     }
 
-    /*@RequestMapping("/testUser")
+    @RequestMapping("/testUser")
     public String testUser() {
         return testUserService.getTestUser().toString();
-    }*/
+    }
 
 }
