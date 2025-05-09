@@ -72,10 +72,8 @@ public class DispatcherServlet extends HttpServlet {
 
     protected void refresh() {
         this.initController();
-
         this.initHandlerMappings(this.webApplicationContext);
-        //TODO：这里存在疑问，如果使用 this.webApplicationContext 会存在问题
-        this.initHandlerAdapters(this.parentApplicationContext);
+        this.initHandlerAdapters(this.webApplicationContext);
         this.initViewResolvers(this.webApplicationContext);
     }
 

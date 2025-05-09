@@ -227,6 +227,7 @@ public class App {
 遗留的疑问：    
 1. DispatcherServlet 中的 controller 相关 bean 的初始化已经交给 AnnotationConfigWebApplicationContext 管理了，它的 init 方法不用在调用 initController 了。
 2. 如果在 HelloWorldBean 中以 @Autowired 注解注入 TestUserService，是无法注入成功的？那么 Spring 是怎么做的呢，自己当前的 factory 找不到，去父类的 factory 找？
+> 已解决，在 DefaultListableBeanFactory 中实现了 getBean 方法，super.getBean(beanName) 获取不到，则到 parentBeanFactory 中获取。
 
 # 10｜数据绑定: 如何自动转换传入的参数？
 
@@ -281,6 +282,8 @@ public class App {
 遗留的疑问：   
 1. handlerAdapter 配置在 applicationContext.xml 中，在 DispatchServlet 中使用 `this.webApplicationContext` 应该是获取不到 handlerAdapter 的。
 > applicationContext.xml 中配置的 bean 不是应该在 ContextLoaderListener 中扫描加载，是 DispatchServlet 的 parentApplicationContext 吗？
+> 已解决，在 DefaultListableBeanFactory 中实现了 getBean 方法，super.getBean(beanName) 获取不到，则到 parentBeanFactory 中获取。
+
 
 # 13｜JDBC访问框架：如何抽取JDBC模板并隔离数据库？
 
@@ -318,6 +321,22 @@ public class App {
 - DefaultSqlSession：实现 SQL 会话接口，默认 SQL 会话，用于执行 SQL 语句。
 - MapperNode：节点，用于封装 SQL 语句。
 
+# 17｜动态代理：如何在运行时插入逻辑？
+
+## aop-01
+
+- 将这些例行性逻辑（日志记录、权限检查等）单独抽取出来，然后在程序运行的时候动态插入到业务逻辑中呢？
+- 代理模式、静态代理、动态代理。
+- FactoryBeanRegistrySupport：抽象类，继承 DefaultSingletonBeanRegistry。新增方法：doGetObjectFromFactoryBean()，从一个 Factory Bean 里面获取内部包含的那个 target 对象。
+- 改写 AbstractBeanFactory，由原本继承 DefaultSingletonBeanRegistry 改成继承 FactoryBeanRegistrySupport，保留原有功能的同时增加了功能扩展。
+- 修改 getBean() 方法，判断如果 Bean 对象是 FactoryBean 类型时，则调用 getObjectForBeanInstance 方法。
+- getObjectForBeanInstance 又会调用 doGetObjectFromFactoryBean，doGetObjectFromFactoryBean 中会根据 factoryBean 调用 getObject。
+- getObject() 只是 FactoryBean 里的一个接口，接下来进行接口实现 ProxyFactoryBean。
+- 创建动态代理：核心在于，ProxyFactoryBean 在 getObject() 方法中生成了一个代理 getProxy(createAopProxy())，同样也是通过这种方式，拿到了要代理的目标对象。
+- 动态代理进行了封装 AopProxy、AopProxyFactory，JDK 代理只是其中一种实现方式，还有 Cglib 代理。
+- 这样将 IoC 容器里的 Bean 分成了两类：一是普通的 Bean，二是 Factory Bean。
+- AOP 还有别的实现方案，比如 AspectJ，也比较常用，在实际工程实践中，一般采用的就是 AspectJ，而不是 Spring AOP，因为 AspectJ 更加高效，功能更强。
+- AspectJ 是编译时创建的代理，性能高十倍以上，而且切入点不仅仅在方法上，而是可以在类的任何部分。所以 AspectJ 才是完整的 AOP 解决方案，Spring AOP 不是成功的工业级方案。之所以保留 Spring AOP，一个原因是原理简单、利于理解，另一个是 Rod Johnson 不忍抛弃自己的心血。
 
 # 问题记录
 

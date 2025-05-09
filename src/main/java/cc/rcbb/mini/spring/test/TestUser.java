@@ -41,6 +41,10 @@ public class TestUser {
         this.age = age;
     }
 
+    public void setAge(String age) {
+        this.age = Integer.valueOf(age);
+    }
+
     public LocalDate getBirthday() {
         return birthday;
     }

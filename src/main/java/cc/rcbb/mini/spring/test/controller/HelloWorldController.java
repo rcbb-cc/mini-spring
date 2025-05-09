@@ -1,5 +1,7 @@
 package cc.rcbb.mini.spring.test.controller;
 
+import cc.rcbb.mini.spring.beans.factory.annotation.Autowired;
+import cc.rcbb.mini.spring.test.IAction;
 import cc.rcbb.mini.spring.test.TestUser;
 import cc.rcbb.mini.spring.test.req.TestReq;
 import cc.rcbb.mini.spring.web.bind.annotation.RequestMapping;
@@ -51,5 +53,15 @@ public class HelloWorldController {
     public String testUser() {
         return testUserService.getTestUser().toString();
     }*/
+
+    @Autowired
+    IAction action;
+
+    @RequestMapping("/testAction")
+    @ResponseBody
+    public String testAction() {
+        action.doAction();
+        return "SUCCESS";
+    }
 
 }

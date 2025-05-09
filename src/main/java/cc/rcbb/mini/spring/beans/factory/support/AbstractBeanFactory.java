@@ -4,6 +4,7 @@ import cc.rcbb.mini.spring.beans.BeanDefinition;
 import cc.rcbb.mini.spring.beans.BeansException;
 import cc.rcbb.mini.spring.beans.PropertyValue;
 import cc.rcbb.mini.spring.beans.PropertyValues;
+import cc.rcbb.mini.spring.beans.factory.FactoryBean;
 import cc.rcbb.mini.spring.beans.factory.config.ConfigurableBeanFactory;
 import cc.rcbb.mini.spring.beans.factory.config.ConstructorArgumentValue;
 import cc.rcbb.mini.spring.beans.factory.config.ConstructorArgumentValues;
@@ -25,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author rcbb.cc
  * @date 2025/3/20
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory, BeanDefinitionRegistry {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory, BeanDefinitionRegistry {
 
     protected Map<String, BeanDefinition> beanDefinitions = new ConcurrentHashMap<>(256);
     protected List<String> beanDefinitionNames = new ArrayList<>();
@@ -81,7 +82,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
             if (singleton == null) {
                 BeanDefinition beanDefinition = this.beanDefinitions.get(beanName);
                 if (beanDefinition == null) {
-                    throw new BeansException("No bean.");
+                    return null;
                 }
                 singleton = createBean(beanDefinition);
                 this.registerSingleton(beanName, singleton);
@@ -99,6 +100,9 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
                 // step 4 : postProcessAfterInitialization。
                 this.applyBeanPostProcessorsAfterInitialization(singleton, beanName);
             }
+        }
+        if (singleton instanceof FactoryBean) {
+            return this.getObjectForBeanInstance(singleton, beanName);
         }
         return singleton;
     }
@@ -264,6 +268,17 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     @Override
     public Class<?> getType(String name) {
         return this.beanDefinitions.get(name).getClass();
+    }
+
+    protected Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+        if (!(beanInstance instanceof FactoryBean)) {
+            return beanInstance;
+        }
+
+        Object object = null;
+        FactoryBean<?> factory = (FactoryBean<?>) beanInstance;
+        object = getObjectFromFactoryBean(factory, beanName);
+        return object;
     }
 
     abstract public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException;

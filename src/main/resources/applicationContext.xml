@@ -5,9 +5,7 @@
         <property type="String" name="name" value="abc"/>
         <property type="String" name="age" value="3"/>
     </bean>
-    <bean id="testUserDao" class="cc.rcbb.mini.spring.test.TestUserDao">
-        <property type="cc.rcbb.mini.spring.test.TestUser" name="testUser" ref="testUser"/>
-    </bean>
+    <bean id="testUserDao" class="cc.rcbb.mini.spring.test.TestUserDao"></bean>
     <bean id="testUserService" class="cc.rcbb.mini.spring.test.TestUserService"/>
 
     <bean id="handlerAdapter" class="cc.rcbb.mini.spring.web.method.annotation.RequestMappingHandlerAdapter">
@@ -19,6 +17,25 @@
     <bean id="objectMapper" class="cc.rcbb.mini.spring.util.DefaultObjectMapper">
         <property type="String" name="dateFormat" value="yyyy/MM/dd"/>
         <property type="String" name="decimalFormat" value="###.##"/>
+    </bean>
+
+    <bean id="dataSource" class="cc.rcbb.mini.spring.jdbc.datasource.SingleConnectionDataSource">
+        <property type="String" name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property type="String" name="url" value="jdbc:mysql://127.0.0.1:3306/test_db"/>
+        <property type="String" name="username" value="root"/>
+        <property type="String" name="password" value="123456"/>
+    </bean>
+    <bean id="jdbcTemplate" class="cc.rcbb.mini.spring.jdbc.core.JdbcTemplate">
+        <property type="javax.sql.DataSource" name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="sqlSessionFactory" class="cc.rcbb.mini.spring.batis.DefaultSqlSessionFactory" init-method="init">
+        <property type="String" name="mapperLocations" value="mapper"></property>
+    </bean>
+
+    <bean id="realAction" class="cc.rcbb.mini.spring.test.ActionImpl" />
+
+    <bean id="action" class="cc.rcbb.mini.spring.aop.ProxyFactoryBean" >
+        <property type="java.lang.Object" name="target" ref="realAction"/>
     </bean>
 
 </beans>
