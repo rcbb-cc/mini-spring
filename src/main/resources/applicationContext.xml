@@ -9,7 +9,8 @@
     <bean id="testUserService" class="cc.rcbb.mini.spring.test.TestUserService"/>
 
     <bean id="handlerAdapter" class="cc.rcbb.mini.spring.web.method.annotation.RequestMappingHandlerAdapter">
-        <property type="cc.rcbb.mini.spring.http.converter.HttpMessageConverter" name="messageConverter" ref="messageConverter"/>
+        <property type="cc.rcbb.mini.spring.http.converter.HttpMessageConverter" name="messageConverter"
+                  ref="messageConverter"/>
     </bean>
     <bean id="messageConverter" class="cc.rcbb.mini.spring.http.converter.DefaultHttpMessageConverter">
         <property type="cc.rcbb.mini.spring.util.ObjectMapper" name="objectMapper" ref="objectMapper"/>
@@ -32,10 +33,15 @@
         <property type="String" name="mapperLocations" value="mapper"></property>
     </bean>
 
-    <bean id="realAction" class="cc.rcbb.mini.spring.test.ActionImpl" />
+    <bean id="realAction" class="cc.rcbb.mini.spring.test.ActionImpl"/>
+    <bean id="tracingInterceptor" class="cc.rcbb.mini.spring.aop.TracingInterceptor"/>
+    <bean id="myBeforeAdvice" class="cc.rcbb.mini.spring.test.advice.MyBeforeAdvice"/>
+    <bean id="myAfterAdvice" class="cc.rcbb.mini.spring.test.advice.MyAfterAdvice"/>
 
-    <bean id="action" class="cc.rcbb.mini.spring.aop.ProxyFactoryBean" >
+    <bean id="action" class="cc.rcbb.mini.spring.aop.ProxyFactoryBean" init-method="initializeAdvisor">
         <property type="java.lang.Object" name="target" ref="realAction"/>
+        <!--<property type="java.lang.String" name="interceptorName" value="tracingInterceptor"/>-->
+        <property type="java.lang.String" name="interceptorName" value="myBeforeAdvice"/>
     </bean>
 
 </beans>

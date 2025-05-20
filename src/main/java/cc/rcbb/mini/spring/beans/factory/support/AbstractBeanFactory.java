@@ -4,6 +4,7 @@ import cc.rcbb.mini.spring.beans.BeanDefinition;
 import cc.rcbb.mini.spring.beans.BeansException;
 import cc.rcbb.mini.spring.beans.PropertyValue;
 import cc.rcbb.mini.spring.beans.PropertyValues;
+import cc.rcbb.mini.spring.beans.factory.BeanFactoryAware;
 import cc.rcbb.mini.spring.beans.factory.FactoryBean;
 import cc.rcbb.mini.spring.beans.factory.config.ConfigurableBeanFactory;
 import cc.rcbb.mini.spring.beans.factory.config.ConstructorArgumentValue;
@@ -86,6 +87,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
                 }
                 singleton = createBean(beanDefinition);
                 this.registerSingleton(beanName, singleton);
+
+                if (singleton instanceof BeanFactoryAware) {
+                    ((BeanFactoryAware) singleton).setBeanFactory(this);
+                }
 
                 // beanPostProcessor
                 // step 1 : postProcessBeforeInitialization

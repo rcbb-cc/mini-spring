@@ -338,6 +338,25 @@ public class App {
 - AOP 还有别的实现方案，比如 AspectJ，也比较常用，在实际工程实践中，一般采用的就是 AspectJ，而不是 Spring AOP，因为 AspectJ 更加高效，功能更强。
 - AspectJ 是编译时创建的代理，性能高十倍以上，而且切入点不仅仅在方法上，而是可以在类的任何部分。所以 AspectJ 才是完整的 AOP 解决方案，Spring AOP 不是成功的工业级方案。之所以保留 Spring AOP，一个原因是原理简单、利于理解，另一个是 Rod Johnson 不忍抛弃自己的心血。
 
+#  18｜拦截器 ：如何在方法前后进行拦截？
+
+## aop-02
+
+- 将动态添加的逻辑设计得更加结构化一点，而不是全部简单地堆在 invoke() 一个方法中。
+- Advice：接口，表示这是一个增强操作。  
+- BeforeAdvice：继承 Advice 接口，用于在方法调用前执行逻辑。
+- AfterAdvice：继承 Advice 接口，用于在方法调用后执行逻辑。
+- Interceptor：接口，拦截器，它实现的是真正的增强逻辑。  
+- MethodInterceptor：接口，调用方法上的拦截器，它实现了在某个方法上的增强。  
+- MethodInvocation：接口，通过反射方法调用业务逻辑的那一段代码的包装。
+- TracingInterceptor：实现 MethodInterceptor 接口，用于记录方法调用的开始和结束。
+- DefaultAdvisor：实现 Advisor 接口。
+- ReflectiveMethodInvocation：实现 MethodInvocation 接口，用于封装方法调用。
+- MethodBeforeAdvice：实现 BeforeAdvice 拦截器，用于在方法调用前执行逻辑。
+- AfterReturningAdvice：实现 Advice 拦截器，用于在方法调用后执行逻辑。
+- MethodAfterReturningAdvice：实现 AfterReturningAdvice 拦截器，用于在方法调用后执行逻辑。
+- AfterReturningAdviceInterceptor：实现 MethodInterceptor 拦截器，用于在方法调用后执行逻辑。
+
 # 问题记录
 
 ## 为啥不直接给成员变量赋值呢？
