@@ -38,10 +38,14 @@
     <bean id="myBeforeAdvice" class="cc.rcbb.mini.spring.test.advice.MyBeforeAdvice"/>
     <bean id="myAfterAdvice" class="cc.rcbb.mini.spring.test.advice.MyAfterAdvice"/>
 
+    <bean id="advisor" class="cc.rcbb.mini.spring.aop.NameMatchMethodPointcutAdvisor" >
+        <property type="cc.rcbb.mini.spring.aop.Advice" name="advice" ref="myBeforeAdvice"/>
+        <property type="java.lang.String" name="mappedName" value="do*"/>
+    </bean>
+
     <bean id="action" class="cc.rcbb.mini.spring.aop.ProxyFactoryBean" init-method="initializeAdvisor">
         <property type="java.lang.Object" name="target" ref="realAction"/>
-        <!--<property type="java.lang.String" name="interceptorName" value="tracingInterceptor"/>-->
-        <property type="java.lang.String" name="interceptorName" value="myBeforeAdvice"/>
+        <property type="java.lang.String" name="interceptorName" value="advisor"/>
     </bean>
 
 </beans>

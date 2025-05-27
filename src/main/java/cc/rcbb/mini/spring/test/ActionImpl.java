@@ -14,4 +14,8 @@ public class ActionImpl implements IAction {
         System.out.println("doAction");
     }
 
+    @Override
+    public void doSomething() {
+        System.out.println("doSomething");
+    }
 }

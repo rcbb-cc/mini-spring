@@ -10,6 +10,6 @@ package cc.rcbb.mini.spring.aop;
  */
 public interface AopProxyFactory {
 
-    AopProxy createAopProxy(Object target, Advisor advisor);
+    AopProxy createAopProxy(Object target, PointcutAdvisor advisor);
 
 }

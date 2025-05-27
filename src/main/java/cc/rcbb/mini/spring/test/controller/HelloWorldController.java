@@ -57,10 +57,17 @@ public class HelloWorldController {
     @Autowired
     IAction action;
 
-    @RequestMapping("/testAction")
+    @RequestMapping("/testDoAction")
     @ResponseBody
-    public String testAction() {
+    public String testDoAction() {
         action.doAction();
+        return "SUCCESS";
+    }
+
+    @RequestMapping("/testDoSomething")
+    @ResponseBody
+    public String testDoSomething() {
+        action.doSomething();
         return "SUCCESS";
     }
 

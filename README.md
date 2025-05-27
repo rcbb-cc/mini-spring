@@ -357,6 +357,23 @@ public class App {
 - MethodAfterReturningAdvice：实现 AfterReturningAdvice 拦截器，用于在方法调用后执行逻辑。
 - AfterReturningAdviceInterceptor：实现 MethodInterceptor 拦截器，用于在方法调用后执行逻辑。
 
+# 19｜Pointcut ：如何批量匹配代理方法？
+
+## aop-03
+
+- Pointcut：接口，切点，用于匹配代理方法。
+- MethodMatcher：接口，方法匹配器，用于匹配代理方法。
+- PointcutAdvisor：接口，继承 Advisor 接口，Advisor 的扩展，用于匹配代理方法。
+- NameMatchMethodPointcut：实现 Pointcut 接口，用于匹配代理方法。
+- NameMatchMethodPointcutAdvisor：实现 PointcutAdvisor 接口，用于匹配代理方法。
+
+总结：
+- Join Point：连接点，是指切面可以插入的地方，这个点可以在函数调用时或者正常流程中某一行等位置，加入切面的处理逻辑，来实现代码增强的效果。  
+- Advice：通知，表示在特定的连接点采取的操作。
+- Advisor：通知者，实现了 Advice。
+- Interceptor：拦截器，作用是拦截流程。
+- Pointcut：切点。
+
 # 问题记录
 
 ## 为啥不直接给成员变量赋值呢？
